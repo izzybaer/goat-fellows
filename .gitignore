@@ -7,6 +7,9 @@ build/
 .env
 .test.env
 
+# this is an issue with Michael Porter's npm setup.
+package-lock.json
+
 ### OSX ###
 .DS_Store
 .AppleDouble
