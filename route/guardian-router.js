@@ -16,7 +16,7 @@ guardianRouter.post('/api/guardian', bearerAuth, jsonParser, (req, res, next) =>
     .catch(next);
 });
 
-guardianRouter.get('/api/guardian/:id', (req, res, next) => {
+guardianRouter.get('/api/guardian/:id', bearerAuth, (req, res, next) => {
   Guardian.findById(req.params.id)
     .then(data => res.json(data))
     .catch(next);

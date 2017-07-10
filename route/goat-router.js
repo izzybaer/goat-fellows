@@ -33,7 +33,7 @@ goatRouter.put('/api/guardian/:id', bearerAuth, getGuardian, jsonParser, (req, r
     .catch(next);
 });
 
-goatRouter.delete('/api/guardian/:id', bearerAuth, (req, res, next) => {
+goatRouter.delete('/api/guardian/:id', bearerAuth, getGuardian, (req, res, next) => {
   Guardian.findByIdAndRemove(req.params.id)
     .then(() => res.sendStatus(204))
     .catch(next);
