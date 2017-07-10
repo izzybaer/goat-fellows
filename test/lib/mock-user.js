@@ -7,7 +7,7 @@ const mockUser = module.exports = {};
 
 mockUser.createOne = () => {
   let result = {};
-  result.password = faker.internet.password;
+  result.password = faker.internet.password();
   return new User({
     username: faker.internet.userName(),
     email: faker.internet.email(),
