@@ -22,7 +22,7 @@ userSchema.methods.passwordHashCreate = function (password) {
 
 userSchema.methods.passwordHashCompare = function (password) {
   return bcrypt.compare(password, this.password)
-    .then((isCorrect) => {
+    .then(isCorrect => {
       if (isCorrect)
         return this;
       throw new Error('unauthorized password does not match');
@@ -37,6 +37,8 @@ userSchema.methods.tokenSeedCreate = function () {
       this.save()
         .then(() => resolve(this))
         .catch((err) => {
+          if (err.message.toLowerCase().includes('validation'))
+            return reject(new Error('validation failed'));
           if (tries < 1)
             return reject(new Error('server failed to create tokenSeed'));
           tries--;

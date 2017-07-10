@@ -16,7 +16,7 @@ describe('testing user auth routes', () => {
   after(server.stop);
   afterEach(clearDB);
   describe('testing POST at /api/signup', () => {
-    it('should respond with a 200 status and a token ', () => {
+    it('should respond with a 200 status and a token', () => {
       return superagent.post(`${API_URL}/api/signup`)
         .send({
           email: faker.internet.email(),
@@ -28,16 +28,41 @@ describe('testing user auth routes', () => {
           expect(res.text).toExist();
         });
     });
-    it('should respond with a 200 status and a token ', () => {
+    it('should respond with a 400 status due to missing email', () => {
       return superagent.post(`${API_URL}/api/signup`)
         .send({
-          email: faker.internet.email(),
           username: faker.internet.userName(),
           password: faker.internet.password(),
         })
-        .then((res) => {
-          expect(res.status).toEqual(200);
-          expect(res.text).toExist();
+        .catch((res) => {
+          expect(res.status).toEqual(400);
+        });
+    });
+    it('should respond with a 400 status due to missing username', () => {
+      return superagent.post(`${API_URL}/api/signup`)
+        .send({
+          email: faker.internet.email(),
+          password: faker.internet.password(),
+        })
+        .catch((res) => {
+          expect(res.status).toEqual(400);
+        });
+    });
+    it('should respond with a 400 status due to missing password', () => {
+      return superagent.post(`${API_URL}/api/signup`)
+        .send({
+          username: faker.internet.userName(),
+          email: faker.internet.email(),
+        })
+        .catch((res) => {
+          expect(res.status).toEqual(400);
+        });
+    });
+    it('should respond with a 400 status due to no body', () => {
+      return superagent.post(`${API_URL}/api/signup`)
+        .send({})
+        .catch((res) => {
+          expect(res.status).toEqual(400);
         });
     });
   });
