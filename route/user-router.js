@@ -1,14 +1,10 @@
 'use strict';
 
-// npm modules
 const {Router} = require('express');
 const jsonParser = require('body-parser').json();
-
-// app modules
 const basicAuth = require('../lib/auth-middleware.js');
 const User = require('../model/user.js');
 
-// module logic
 const authRouter = module.exports = new Router();
 
 authRouter.post('/api/signup', jsonParser, (req, res, next) => {
