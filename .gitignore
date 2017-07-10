@@ -7,7 +7,7 @@ build/
 .env
 .test.env
 
-# this is an issue with Michael Porter's npm setup.
+# this is an issue with Michael Porter's node/npm setup.
 package-lock.json
 
 ### OSX ###
