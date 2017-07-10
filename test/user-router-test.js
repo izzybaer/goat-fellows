@@ -82,5 +82,66 @@ describe('testing user auth routes', () => {
           expect(res.text.length > 1).toBeTruthy();
         });
     });
+
+    it('Should return 401 due to bad password.', () => {
+      let tempUser;
+      return mockUser.createOne()
+        .then(userData => {
+          tempUser = userData.user;
+          let encoded = new Buffer(`${tempUser.username}:wut`).toString('base64');
+          return superagent.get(`${API_URL}/api/login`)
+            .set('Authorization', `Basic ${encoded}`);
+        })
+        .catch(res => {
+          expect(res.status).toEqual(401);
+        });
+    });
+
+    it('Should return 401 due to bad username.', () => {
+      return mockUser.createOne()
+        .then(userData => {
+          let encoded = new Buffer(`lol: ${userData.password}`).toString('base64');
+          return superagent.get(`${API_URL}/api/login`)
+            .set('Authorization', `Basic ${encoded}`);
+        })
+        .catch(res => {
+          expect(res.status).toEqual(401);
+        });
+    });
+
+    it('Should return 401 due to bad auth header.', () => {
+      return mockUser.createOne()
+        .then(userData => {
+          let encoded = new Buffer(`${userData.username}: ${userData.password}`).toString('base64');
+          return superagent.get(`${API_URL}/api/login`)
+            .set('goat', `Basic ${encoded}`);
+        })
+        .catch(res => {
+          expect(res.status).toEqual(401);
+        });
+    });
+
+    it('Should return 401 due to bad encoded.', () => {
+      return mockUser.createOne()
+        .then(userData => {
+          return superagent.get(`${API_URL}/api/login`)
+            .set('Authorization', `Basic anotherGoat`);
+        })
+        .catch(res => {
+          expect(res.status).toEqual(401);
+        });
+    });
+
+    it('Should return 401 due to bad basic.', () => {
+      return mockUser.createOne()
+        .then(userData => {
+          let encoded = new Buffer(`${userData.username}: ${userData.password}`).toString('base64');
+          return superagent.get(`${API_URL}/api/login`)
+            .set('goat', `L33t ${encoded}`);
+        })
+        .catch(res => {
+          expect(res.status).toEqual(401);
+        });
+    });
   });
 });
