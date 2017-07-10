@@ -5,9 +5,9 @@ const superagent = require('superagent');
 const expect = require('expect');
 const faker = require('faker');
 
-const clearDB = require('./lib/clearDB.js')
-const userRouter = require('../route/user-router.js');
-const mockUser = require('./lib/mock-user.js');
+const clearDB = require('./lib/clearDB.js');
+// const userRouter = require('../route/user-router.js');
+// const mockUser = require('./lib/mock-user.js');
 const server = require('../lib/server.js');
 const API_URL = process.env.API_URL;
 
