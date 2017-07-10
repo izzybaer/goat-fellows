@@ -147,10 +147,17 @@ describe('testing user auth routes', () => {
 
   describe('testing catch all 404s', () => {
     it('should return 404 /api/*', () => {
-      return superagent.get(`${API_URL}/api/blah`);
-    })
-      .catch(res => {
-        expect(res.status).toEqual(404);
-      });
+      return superagent.get(`${API_URL}/api/blah`)
+        .catch(res => {
+          expect(res.status).toEqual(404);
+        });
+    });
+
+    it('should return 404 /*', () => {
+      return superagent.get(`${API_URL}/bleh`)
+        .catch(res => {
+          expect(res.status).toEqual(404);
+        });
+    });
   });
 });
