@@ -6,8 +6,10 @@ const mockUser = require('./mock-user.js');
 const mockGuardian = module.exports = {};
 
 mockGuardian.createOne = () => {
+  let result = {};
   return mockUser.createOne()
     .then((userData) => {
+      result.user = userData;
       return new Guardian({
         firstName: faker.name.firstName(),
         lastName: faker.name.lastName(),
@@ -17,29 +19,11 @@ mockGuardian.createOne = () => {
         service: faker.company.bsBuzz(),
         phoneNumber: faker.phone.phoneNumber(),
         userID: userData.user._id.toString(),
-      });
-    });
-};
-
-mockGuardian.createMany = (n) => {
-  let result = {};
-  return mockUser.createOne()
-    .then(user => {
-      result.user = user;
-      let guardiansToSave = new Array(n).fill(0).map(() => new Guardian({
-        firstName: faker.name.firstName(),
-        lastName: faker.name.lastName(),
-        email: faker.internet.email(),
-        city: faker.address.city(),
-        state: faker.address.stateAbbr(),
-        service: faker.company.bsBuzz(),
-        phoneNumber: faker.phone.phoneNumber(),
-        userID: result.user._id.toString(),
-      }).save());
-      return Promise.all(guardiansToSave);
+      })
+        .save();
     })
-    .then(guardians => {
-      result.guardians = guardians;
+    .then(guardian => {
+      result.guardian = guardian;
       return result;
     });
 };

@@ -6,7 +6,7 @@ const expect = require('expect');
 const faker = require('faker');
 
 const clearDB = require('./lib/clearDB.js');
-// const mockGuardian = require('./lib/mock-guardian.js');
+const mockGuardian = require('./lib/mock-guardian.js');
 
 const mockUser = require('./lib/mock-user.js');
 const server = require('../lib/server.js');
@@ -79,10 +79,8 @@ describe('testing guardian-routes', () => {
         });
     });
     it('should return a POST 400 due to missing first name', () => {
-      let tempUser;
       return mockUser.createOne()
         .then((user) => {
-          tempUser = user;
           let tempGuardian = {
             lastName: faker.name.lastName(),
             city: faker.address.city(),
@@ -100,10 +98,8 @@ describe('testing guardian-routes', () => {
         });
     });
     it('should return a POST 400 due to missing last name', () => {
-      let tempUser;
       return mockUser.createOne()
         .then((user) => {
-          tempUser = user;
           let tempGuardian = {
             firstName: faker.name.firstName(),
             city: faker.address.city(),
@@ -121,10 +117,8 @@ describe('testing guardian-routes', () => {
         });
     });
     it('should return a POST 400 due to missing city', () => {
-      let tempUser;
       return mockUser.createOne()
         .then((user) => {
-          tempUser = user;
           let tempGuardian = {
             firstName: faker.name.firstName(),
             lastName: faker.name.lastName(),
@@ -142,10 +136,8 @@ describe('testing guardian-routes', () => {
         });
     });
     it('should return a POST 400 due to missing state', () => {
-      let tempUser;
       return mockUser.createOne()
         .then((user) => {
-          tempUser = user;
           let tempGuardian = {
             firstName: faker.name.firstName(),
             lastName: faker.name.lastName(),
@@ -163,10 +155,8 @@ describe('testing guardian-routes', () => {
         });
     });
     it('should return a POST 400 due to missing service', () => {
-      let tempUser;
       return mockUser.createOne()
         .then((user) => {
-          tempUser = user;
           let tempGuardian = {
             firstName: faker.name.firstName(),
             lastName: faker.name.lastName(),
@@ -184,10 +174,8 @@ describe('testing guardian-routes', () => {
         });
     });
     it('should return a POST 400 due to missing phone number', () => {
-      let tempUser;
       return mockUser.createOne()
         .then((user) => {
-          tempUser = user;
           let tempGuardian = {
             firstName: faker.name.firstName(),
             lastName: faker.name.lastName(),
@@ -204,54 +192,9 @@ describe('testing guardian-routes', () => {
             });
         });
     });
-    it('should return a POST 400 due to missing email', () => {
-      let tempUser;
-      return mockUser.createOne()
-        .then((user) => {
-          tempUser = user;
-          let tempGuardian = {
-            firstName: faker.name.firstName(),
-            lastName: faker.name.lastName(),
-            city: faker.address.city(),
-            state: faker.address.stateAbbr(),
-            service: faker.company.bsBuzz(),
-            phoneNumber: faker.phone.phoneNumber(),
-
-          };
-          return superagent.post(`${API_URL}/api/guardians`)
-            .set('Authorization', `Bearer ${user.token}`)
-            .send(tempGuardian)
-            .catch((res) => {
-              expect(res.status).toEqual(400);
-            });
-        });
-    });
-    // it('should return a POST 400 due to missing userid', () => {
-    //   let tempUser;
-    //   return mockUser.createOne()
-    //     .then((user) => {
-    //       tempUser = user;
-    //       let tempGuardian = {
-    //         firstName: faker.name.firstName(),
-    //         lastName: faker.name.lastName(),
-    //         city: faker.address.city(),
-    //         state: faker.address.stateAbbr(),
-    //         service: faker.company.bsBuzz(),
-    //         phoneNumber: faker.phone.phoneNumber(),
-    //       };
-    //       return superagent.post(`${API_URL}/api/guardians`)
-    //         .set('Authorization', `Bearer ${user.token}`)
-    //         .send(tempGuardian)
-    //         .catch((res) => {
-    //           expect(res.status).toEqual(400);
-    //         });
-    //     });
-    // });
     it('should return a POST 401 due to no authorization provided', () => {
-      let tempUser;
       return mockUser.createOne()
         .then((user) => {
-          tempUser = user;
           let tempGuardian = {
             firstName: faker.name.firstName(),
             lastName: faker.name.lastName(),
@@ -265,6 +208,30 @@ describe('testing guardian-routes', () => {
             .send(tempGuardian)
             .catch((res) => {
               expect(res.status).toEqual(401);
+            });
+        });
+    });
+  });
+
+  describe('testing GET for guardian model', () => {
+    it('should respond with a 200 and a guardian body', () => {
+      let tempData;
+      return mockGuardian.createOne()
+        .then(data => {
+          tempData = data;
+          console.log(tempData.guardian._id, '*****************');
+          return superagent.get(`${API_URL}/api/guardians/${tempData.guardian._id}`)
+            .set('Authorization', `Bearer ${data.user.token}`)
+            .then(res => {
+              expect(res.status).toEqual(200);
+              expect(res.body.firstName).toEqual(tempData.guardian.firstName);
+              expect(res.body.lastName).toEqual(tempData.guardian.lastName);
+              expect(res.body.city).toEqual(tempData.guardian.city);
+              expect(res.body.state).toEqual(tempData.guardian.state);
+              expect(res.body.service).toEqual(tempData.guardian.service);
+              expect(res.body.phoneNumber).toEqual(tempData.guardian.phoneNumber);
+              expect(res.body.email).toEqual(tempData.guardian.email);
+              expect(res.body.userID).toEqual(tempData.guardian.userID);
             });
         });
     });
