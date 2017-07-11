@@ -28,7 +28,8 @@ guardianRouter.post('/api/guardians', jsonParser, bearerAuth, (req, res, next) =
 guardianRouter.get('/api/guardians/:id', bearerAuth, (req, res, next) => {
   Guardian.findById(req.params.id)
     .then(data => {
-      console.log(data, 'data');
+      if(!data)
+        throw new Error('objectid failed: guardian not found')
       return res.json(data);
     })
 

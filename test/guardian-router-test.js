@@ -213,13 +213,12 @@ describe('testing guardian-routes', () => {
     });
   });
 
-  describe('testing GET for guardian model', () => {
+  describe.only('testing GET for guardian model', () => {
     it('should respond with a 200 and a guardian body', () => {
       let tempData;
       return mockGuardian.createOne()
         .then(data => {
           tempData = data;
-          console.log(tempData.guardian._id, '*****************');
           return superagent.get(`${API_URL}/api/guardians/${tempData.guardian._id}`)
             .set('Authorization', `Bearer ${data.user.token}`)
             .then(res => {
@@ -232,6 +231,58 @@ describe('testing guardian-routes', () => {
               expect(res.body.phoneNumber).toEqual(tempData.guardian.phoneNumber);
               expect(res.body.email).toEqual(tempData.guardian.email);
               expect(res.body.userID).toEqual(tempData.guardian.userID);
+            });
+        });
+    });
+
+    it('should respond with a 404 bad id', () => {
+      let tempData;
+      return mockGuardian.createOne()
+        .then(data => {
+          tempData = data;
+          return superagent.get(`${API_URL}/api/guardians/srghrtydrth`)
+            .set('Authorization', `Bearer ${data.user.token}`)
+            .catch(res => {
+              expect(res.status).toEqual(404);
+            });
+        });
+    });
+
+    it('should respond with a 401 bad Auth', () => {
+      let tempData;
+      return mockGuardian.createOne()
+        .then(data => {
+          tempData = data;
+          return superagent.get(`${API_URL}/api/guardians/${tempData.guardian._id}`)
+            .set('derp', `Bearer ${data.user.token}`)
+            .catch(res => {
+              expect(res.status).toEqual(401);
+            });
+        });
+    });
+
+    it('should respond with a 401 bad Bearer', () => {
+      let tempData;
+      return mockGuardian.createOne()
+        .then(data => {
+          tempData = data;
+          return superagent.get(`${API_URL}/api/guardians/${tempData.guardian._id}`)
+            .set('Authorization', `derp ${data.user.token}`)
+            .catch(res => {
+              expect(res.status).toEqual(401);
+            });
+        });
+    });
+
+    it('should respond with a 401 bad token', () => {
+      let tempData;
+      return mockGuardian.createOne()
+        .then(data => {
+          tempData = data;
+          return superagent.get(`${API_URL}/api/guardians/${tempData.guardian._id}`)
+            .set('Authorization', `Bearer derp`)
+            .catch(res => {
+              expect(res.status).toEqual(401);
             });
         });
     });
