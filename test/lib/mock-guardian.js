@@ -8,7 +8,6 @@ const mockGuardian = module.exports = {};
 mockGuardian.createOne = () => {
   return mockUser.createOne()
     .then((userData) => {
-      console.log('userData', userData);
       return new Guardian({
         firstName: faker.name.firstName(),
         lastName: faker.name.lastName(),

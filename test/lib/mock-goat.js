@@ -9,7 +9,6 @@ mockGoat.createOne = () => {
   let result = {};
   return mockGuardian.createOne()
     .then((guardian) => {
-      console.log('guardian', guardian);
       result.guardian = guardian;
       return new Goat({
         city: faker.address.city(),

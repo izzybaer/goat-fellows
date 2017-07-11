@@ -9,7 +9,7 @@ const guardianSchema = mongoose.Schema({
   city: {type: String, required: true, minlength: 1, maxlength: 50},
   state: {type: String, required: true, minlength: 2, maxlength: 2},
   service: {type: String, required: true},
-  phoneNumber: {type: Number, required: true, minlength: 10, maxlength: 10},
+  phoneNumber: {type: String, required: true},
   bio: {type: String, minlength: 0, maxlength: 500},
   userID: {type: mongoose.Schema.Types.ObjectId, required: true},
 });
