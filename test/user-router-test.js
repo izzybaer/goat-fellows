@@ -157,5 +157,33 @@ describe('testing user auth routes', () => {
           expect(res.status).toEqual(404);
         });
     });
+
+    it('should return 409 for dupe key', () => {
+      let tempEmail = faker.internet.email();
+
+      return superagent.post(`${API_URL}/api/signup`)
+        .send({
+          email: tempEmail,
+          username: faker.internet.userName(),
+          password: faker.internet.password(),
+        })
+        .then((res) => {
+          return superagent.post(`${API_URL}/api/signup`)
+            .send({
+              email: tempEmail,
+              username: faker.internet.userName(),
+              password: faker.internet.password(),
+            })
+            .catch((err) => {
+              expect(err.status).toEqual(409);
+            });
+        });
+    });
+    //   return superagent.get(`${API_URL}/bleh`)
+    //     .catch(res => {
+    //       expect(res.status).toEqual(409);
+    //     });
+    // });
+
   });
 });
