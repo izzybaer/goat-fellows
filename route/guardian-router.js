@@ -17,6 +17,7 @@ guardianRouter.post('/api/guardians', jsonParser, bearerAuth, (req, res, next) =
     state: req.body.state,
     service: req.body.service,
     phoneNumber: req.body.phoneNumber,
+    bio: req.body.bio,
     userID: req.user._id.toString(),
   })
     .save()

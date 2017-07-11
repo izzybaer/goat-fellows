@@ -9,7 +9,7 @@ const clearDB = require('./lib/clearDB.js');
 const Guardian = require('../model/guardian.js');
 const mockUser = require('./lib/mock-user.js');
 const mockGoat = require('./lib/mock-goat.js');
-const mockGuardian = require('./lib/mock-guardian.js');
+// const mockGuardian = require('./lib/mock-guardian.js');
 
 
 const server = require('../lib/server.js');
@@ -22,7 +22,7 @@ describe('testing routes for goat model', () => {
   afterEach(clearDB);
 
   describe('testing POST /api/goat', () => {
-    it.only('should return a new goat and respond with 200', () => {
+    it('should return a new goat and respond with 200', () => {
       let tempUser, tempGoat, tempGuardian;
       return mockUser.createOne()
         .then((userData) => {
