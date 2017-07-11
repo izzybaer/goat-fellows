@@ -10,7 +10,6 @@ const getGuardian = require('../lib/get-guardian-middleware.js');
 const goatRouter = module.exports = new Router();
 
 goatRouter.post('/api/guardian', bearerAuth, getGuardian, jsonParser, (req, res, next) => {
-  console.log('req.body', req.body);
   new Guardian(req.body)
     .save()
     .then(data => res.json(data))
