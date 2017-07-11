@@ -4,7 +4,6 @@ require('dotenv').config({path: `${__dirname}/../.test.env`});
 const superagent = require('superagent');
 const expect = require('expect');
 const faker = require('faker');
-
 const clearDB = require('./lib/clearDB.js');
 // const userRouter = require('../route/user-router.js');
 const mockUser = require('./lib/mock-user.js');
