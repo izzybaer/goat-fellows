@@ -9,14 +9,15 @@ mockGoat.createOne = () => {
   let result = {};
   return mockGuardian.createOne()
     .then((guardian) => {
+      console.log('guardian', guardian);
       result.guardian = guardian;
       return new Goat({
         city: faker.address.city(),
-        state: faker.random.us_state_abbr(),
+        state: faker.address.stateAbbr(),
         address: faker.address.streetAddress(),
-        photoURI: faker.random.avatar_uri(),
-        story: faker.random.catch_phrase_descriptor(),
-        userID: result.user._id,
+        photoURI: faker.image.avatar(),
+        story: faker.lorem.sentence(),
+        userID: guardian.userID,
         guardianID: result.guardian._id,
       });
     });
@@ -29,10 +30,10 @@ mockGoat.createMany = (n) => {
       result.guardian = guardian;
       let goatsToSave = new Array(n).fill(0).map(() => new Goat({
         city: faker.address.city(),
-        state: faker.random.us_state_abbr(),
+        state: faker.address.stateAbbr(),
         address: faker.address.streetAddress(),
-        photoURI: faker.random.avatar_uri(),
-        story: faker.random.catch_phrase_descriptor(),
+        photoURI: faker.image.avatar(),
+        story: faker.lorem.sentence(),
         userID: result.user._id,
         guardianID: result.guardian._id,
       }).save());
