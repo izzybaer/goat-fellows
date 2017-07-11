@@ -17,7 +17,7 @@ describe('testing guardian-routes', () => {
   describe('testing POST at /api/guardians', () => {
     it('should return a POST 200 and returns the created guardian', () => {
       let tempUser;
-      mockUser.createOne()
+      return mockUser.createOne()
         .then((user) => {
           tempUser = user;
           let tempGuardian = {
@@ -48,7 +48,7 @@ describe('testing guardian-routes', () => {
     });
     it('should return a POST 200 and returns the created guardian with bio', () => {
       let tempUser;
-      mockUser.createOne()
+      return mockUser.createOne()
         .then((user) => {
           tempUser = user;
           let tempGuardian = {
@@ -81,7 +81,7 @@ describe('testing guardian-routes', () => {
     });
     it('should return a POST 400 due to missing first name', () => {
       let tempUser;
-      mockUser.createOne()
+      return mockUser.createOne()
         .then((user) => {
           tempUser = user;
           let tempGuardian = {
@@ -103,7 +103,7 @@ describe('testing guardian-routes', () => {
     });
     it('should return a POST 400 due to missing last name', () => {
       let tempUser;
-      mockUser.createOne()
+      return mockUser.createOne()
         .then((user) => {
           tempUser = user;
           let tempGuardian = {
@@ -125,7 +125,7 @@ describe('testing guardian-routes', () => {
     });
     it('should return a POST 400 due to missing city', () => {
       let tempUser;
-      mockUser.createOne()
+      return mockUser.createOne()
         .then((user) => {
           tempUser = user;
           let tempGuardian = {
@@ -147,7 +147,7 @@ describe('testing guardian-routes', () => {
     });
     it('should return a POST 400 due to missing state', () => {
       let tempUser;
-      mockUser.createOne()
+      return mockUser.createOne()
         .then((user) => {
           tempUser = user;
           let tempGuardian = {
@@ -169,7 +169,7 @@ describe('testing guardian-routes', () => {
     });
     it('should return a POST 400 due to missing service', () => {
       let tempUser;
-      mockUser.createOne()
+      return mockUser.createOne()
         .then((user) => {
           tempUser = user;
           let tempGuardian = {
@@ -191,7 +191,7 @@ describe('testing guardian-routes', () => {
     });
     it('should return a POST 400 due to missing phone number', () => {
       let tempUser;
-      mockUser.createOne()
+      return mockUser.createOne()
         .then((user) => {
           tempUser = user;
           let tempGuardian = {
@@ -213,7 +213,7 @@ describe('testing guardian-routes', () => {
     });
     it('should return a POST 400 due to missing email', () => {
       let tempUser;
-      mockUser.createOne()
+      return mockUser.createOne()
         .then((user) => {
           tempUser = user;
           let tempGuardian = {
@@ -236,7 +236,7 @@ describe('testing guardian-routes', () => {
     });
     // it('should return a POST 400 due to missing userid', () => {
     //   let tempUser;
-    //   mockUser.createOne()
+    //   return mockUser.createOne()
     //     .then((user) => {
     //       tempUser = user;
     //       let tempGuardian = {
@@ -258,7 +258,7 @@ describe('testing guardian-routes', () => {
     // });
     it('should return a POST 401 due to no authorization provided', () => {
       let tempUser;
-      mockUser.createOne()
+      return mockUser.createOne()
         .then((user) => {
           tempUser = user;
           let tempGuardian = {
