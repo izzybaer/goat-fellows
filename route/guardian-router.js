@@ -29,7 +29,7 @@ guardianRouter.get('/api/guardians/:id', bearerAuth, (req, res, next) => {
   Guardian.findById(req.params.id)
     .then(data => {
       if(!data)
-        throw new Error('objectid failed: guardian not found')
+        throw new Error('objectid failed: guardian not found');
       return res.json(data);
     })
 

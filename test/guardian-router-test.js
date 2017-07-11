@@ -236,10 +236,8 @@ describe('testing guardian-routes', () => {
     });
 
     it('should respond with a 404 bad id', () => {
-      let tempData;
       return mockGuardian.createOne()
         .then(data => {
-          tempData = data;
           return superagent.get(`${API_URL}/api/guardians/srghrtydrth`)
             .set('Authorization', `Bearer ${data.user.token}`)
             .catch(res => {
@@ -288,7 +286,7 @@ describe('testing guardian-routes', () => {
     });
   });
 
-  describe.only('Testing /api/guardians PUT' , () => {
+  describe('Testing /api/guardians PUT' , () => {
     it('Should respond with a 200 and the updated guardian', () => {
       let tempData;
       let tempGuardian = {
@@ -299,82 +297,123 @@ describe('testing guardian-routes', () => {
         service: faker.company.bsBuzz(),
         phoneNumber: faker.phone.phoneNumber(),
         bio: faker.lorem.sentence(),
-      }
+      };
       return mockGuardian.createOne()
-      .then(data => {
-        tempData = data;
-        return superagent.put(`${API_URL}/api/guardians/${tempData.guardian._id}`)
-          .set(`Authorization`, `Bearer ${data.user.token}`)
-          .send(tempGuardian)
-      })
-      .then(res => {
-        expect(res.status).toEqual(200);
-        expect(res.body.firstName).toEqual(tempGuardian.firstName);
-        expect(res.body.lastName).toEqual(tempGuardian.lastName);
-        expect(res.body.city).toEqual(tempGuardian.city);
-        expect(res.body.state).toEqual(tempGuardian.state);
-        expect(res.body.service).toEqual(tempGuardian.service);
-        expect(res.body.phoneNumber).toEqual(tempGuardian.phoneNumber);
-        expect(res.body.bio).toEqual(tempGuardian.bio);
-        expect(res.body.email).toEqual(tempData.guardian.email);
-        expect(res.body.userID).toEqual(tempData.guardian.userID);
-      });
+        .then(data => {
+          tempData = data;
+          return superagent.put(`${API_URL}/api/guardians/${tempData.guardian._id}`)
+            .set(`Authorization`, `Bearer ${data.user.token}`)
+            .send(tempGuardian);
+        })
+        .then(res => {
+          expect(res.status).toEqual(200);
+          expect(res.body.firstName).toEqual(tempGuardian.firstName);
+          expect(res.body.lastName).toEqual(tempGuardian.lastName);
+          expect(res.body.city).toEqual(tempGuardian.city);
+          expect(res.body.state).toEqual(tempGuardian.state);
+          expect(res.body.service).toEqual(tempGuardian.service);
+          expect(res.body.phoneNumber).toEqual(tempGuardian.phoneNumber);
+          expect(res.body.bio).toEqual(tempGuardian.bio);
+          expect(res.body.email).toEqual(tempData.guardian.email);
+          expect(res.body.userID).toEqual(tempData.guardian.userID);
+        });
     });
 
     it('Should respond with a 400 bad values', () => {
       let tempData;
       return mockGuardian.createOne()
-      .then(data => {
-        tempData = data;
-        return superagent.put(`${API_URL}/api/guardians/${tempData.guardian._id}`)
-          .set(`Authorization`, `Bearer ${data.user.token}`)
-          .send({})
-      })
-      .catch(res => {
-        expect(res.status).toEqual(400);
-      });
+        .then(data => {
+          tempData = data;
+          return superagent.put(`${API_URL}/api/guardians/${tempData.guardian._id}`)
+            .set(`Authorization`, `Bearer ${data.user.token}`)
+            .send({});
+        })
+        .catch(res => {
+          expect(res.status).toEqual(400);
+        });
     });
 
     it('Should respond with a 400 bad id', () => {
-      let tempData;
       return mockGuardian.createOne()
-      .then(data => {
-        tempData = data;
-        return superagent.put(`${API_URL}/api/guardians/regdfggerg`)
-          .set(`Authorization`, `Bearer ${data.user.token}`)
-          .send({})
-      })
-      .catch(res => {
-        expect(res.status).toEqual(400);
-      });
+        .then(data => {
+          return superagent.put(`${API_URL}/api/guardians/regdfggerg`)
+            .set(`Authorization`, `Bearer ${data.user.token}`)
+            .send({});
+        })
+        .catch(res => {
+          expect(res.status).toEqual(400);
+        });
     });
 
     it('Should respond with a 401 bad bearer', () => {
       let tempData;
       return mockGuardian.createOne()
-      .then(data => {
-        tempData = data;
-        return superagent.put(`${API_URL}/api/guardians/${tempData.guardian._id}`)
-          .set(`Authorization`, `derp ${data.user.token}`)
-          .send({})
-      })
-      .catch(res => {
-        expect(res.status).toEqual(401);
-      });
+        .then(data => {
+          tempData = data;
+          return superagent.put(`${API_URL}/api/guardians/${tempData.guardian._id}`)
+            .set(`Authorization`, `derp ${data.user.token}`)
+            .send({});
+        })
+        .catch(res => {
+          expect(res.status).toEqual(401);
+        });
     });
 
     it('Should respond with a 401 no token', () => {
       let tempData;
       return mockGuardian.createOne()
-      .then(data => {
-        tempData = data;
-        return superagent.put(`${API_URL}/api/guardians/${tempData.guardian._id}`)
-          .set(`Authorization`, `Bearer `)
-          .send({})
-      })
-      .catch(res => {
-        expect(res.status).toEqual(401);
-      });
+        .then(data => {
+          tempData = data;
+          return superagent.put(`${API_URL}/api/guardians/${tempData.guardian._id}`)
+            .set(`Authorization`, `Bearer `)
+            .send({});
+        })
+        .catch(res => {
+          expect(res.status).toEqual(401);
+        });
+    });
+  });
+  describe('testing DELETE for guardian model', () => {
+    it('should respond with a 204 and a 404', () => {
+      let tempData;
+      return mockGuardian.createOne()
+        .then(data => {
+          tempData = data;
+          return superagent.delete(`${API_URL}/api/guardians/${tempData.guardian._id}`)
+            .set('Authorization', `Bearer ${data.user.token}`)
+            .then(res => {
+
+              expect(res.status).toEqual(204);
+            }).then(res => {
+              return superagent.get(`${API_URL}/api/guardians/${tempData.guardian._id}`)
+                .set('Authorization', `Bearer ${data.user.token}`)
+                .catch(err => {
+                  expect(err.status).toEqual(404);
+                });
+            });
+        });
+    });
+    it('should respond with a 401 for no Bearer', () => {
+      let tempData;
+      return mockGuardian.createOne()
+        .then(data => {
+          tempData = data;
+          return superagent.delete(`${API_URL}/api/guardians/${tempData.guardian._id}`)
+            .set('Authorization', `Bearer`)
+            .catch(res => {
+              expect(res.status).toEqual(401);
+            });
+        });
+    });
+    it('should respond with a 404 for bad ID', () => {
+      return mockGuardian.createOne()
+        .then(data => {
+          return superagent.delete(`${API_URL}/api/guardians/9879898546`)
+            .set('Authorization', `Bearer ${data.user.token}`)
+            .catch(res => {
+              expect(res.status).toEqual(404);
+            });
+        });
     });
   });
 });
