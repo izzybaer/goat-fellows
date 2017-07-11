@@ -11,7 +11,7 @@ const guardianSchema = mongoose.Schema({
   service: {type: String, required: true},
   phoneNumber: {type: String, required: true},
   bio: {type: String, minlength: 0, maxlength: 500},
-  userID: {type: mongoose.Schema.Types.ObjectId, required: true},
+  userID: {type: mongoose.Schema.Types.ObjectId, required: true, unique: true},
 });
 
 module.exports = mongoose.model('guardian', guardianSchema);
