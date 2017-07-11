@@ -10,7 +10,15 @@ const guardianRouter = module.exports = new Router();
 
 guardianRouter.post('/api/guardians', jsonParser, bearerAuth, (req, res, next) => {
   new Guardian({
-
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.user.email,
+    city: req.body.city,
+    state: req.body.state,
+    service: req.body.service,
+    phoneNumber: req.body.phoneNumber,
+    bio: req.body.bio,
+    userID: req.user._id.toString(),
   })
     .save()
     .then(data => res.json(data))
@@ -19,11 +27,20 @@ guardianRouter.post('/api/guardians', jsonParser, bearerAuth, (req, res, next) =
 
 guardianRouter.get('/api/guardians/:id', bearerAuth, (req, res, next) => {
   Guardian.findById(req.params.id)
-    .then(data => res.json(data))
+    .then(data => {
+      if(!data)
+        throw new Error('objectid failed: guardian not found');
+      return res.json(data);
+    })
+
     .catch(next);
 });
 
-guardianRouter.put('/api/guardians/:id', bearerAuth, jsonParser, (req, res, next) => {
+guardianRouter.put('/api/guardians/:id', jsonParser, bearerAuth, (req, res, next) => {
+  let keys = Object.keys(req.body);
+  if (keys.length < 1) {
+    return res.sendStatus(400);
+  }
   let options = {
     runValidators: true,
     new: true,
