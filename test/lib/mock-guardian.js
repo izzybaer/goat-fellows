@@ -15,9 +15,9 @@ mockGuardian.createOne = () => {
         lastName: faker.name.lastName(),
         email: faker.internet.email(),
         city: faker.address.city(),
-        state: faker.random.us_state_abbr(),
-        service: faker.random.bs_buzz(),
-        phoneNumber: faker.PhoneNumber.phoneNumber(),
+        state: faker.address.stateAbbr(),
+        service: faker.company.bsBuzz(),
+        phoneNumber: faker.phone.phoneNumber(),
         userID: result.user._id.toString(),
       });
     });
@@ -33,10 +33,10 @@ mockGuardian.createMany = (n) => {
         lastName: faker.name.lastName(),
         email: faker.internet.email(),
         city: faker.address.city(),
-        state: faker.random.us_state_abbr(),
-        service: faker.random.bs_buzz(),
-        phoneNumber: faker.PhoneNumber.phoneNumber(),
-        userID: result.user._id.toString(),
+        state: faker.address.stateAbbr(),
+        service: faker.company.bsBuzz(),
+        phoneNumber: faker.phone.phoneNumber(),
+        userID: result.user._id.toString(), 
       }).save());
       return Promise.all(guardiansToSave);
     })
