@@ -9,7 +9,16 @@ const bearerAuth = require('../lib/bearer-auth-middleware.js');
 const guardianRouter = module.exports = new Router();
 
 guardianRouter.post('/api/guardians', jsonParser, bearerAuth, (req, res, next) => {
-  new Guardian(req.body)
+  new Guardian({
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.user.email,
+    city: req.body.city,
+    state: req.body.state,
+    service: req.body.service,
+    phoneNumber: req.body.phoneNumber,
+    userID: req.user._id.toString(),
+  })
     .save()
     .then(data => res.json(data))
     .catch(next);
@@ -21,7 +30,7 @@ guardianRouter.get('/api/guardians/:id', bearerAuth, (req, res, next) => {
     .catch(next);
 });
 
-guardianRouter.put('/api/guardians/:id', bearerAuth, jsonParser, (req, res, next) => {
+guardianRouter.put('/api/guardians/:id', jsonParser, bearerAuth, (req, res, next) => {
   let options = {
     runValidators: true,
     new: true,

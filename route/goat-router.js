@@ -2,38 +2,52 @@
 
 const {Router} = require('express');
 
-const jsonParser = require('body-parser').json();
-const Guardian = require('../model/guardian.js');
+const Goat = require('../model/goat.js');
 const bearerAuth = require('../lib/bearer-auth-middleware.js');
-const getGuardian = require('../lib/get-guardian-middleware.js');
+const s3Upload = require('../lib/s3-upload-middleware.js');
 
 const goatRouter = module.exports = new Router();
 
-goatRouter.post('/api/goat', bearerAuth, getGuardian, jsonParser, (req, res, next) => {
-  new Guardian(req.body)
+goatRouter.post('/api/goats', bearerAuth, s3Upload('image'), (req, res, next) => {
+  new Goat({
+    address: req.body.address,
+    address2: req.body.address2,
+    city: req.body.city,
+    state: req.body.state,
+    zipCode: req.body.zipCode,
+    photoURI: req.s3Data.Location,
+    story: req.body.story,
+    name: req.body.name,
+    gender: req.body.gender,
+    breed: req.body.breed,
+    weight: req.body.weight,
+    age: req.body.age,
+    userID: req.user._id.toString(),
+    guardianID: req.body.guardianID.toString(),
+  })
     .save()
     .then(data => res.json(data))
     .catch(next);
 });
 
-goatRouter.get('/api/goat/:id', bearerAuth, (req, res, next) => {
-  Guardian.findById(req.params.id)
+goatRouter.get('/api/goats/:id', bearerAuth, (req, res, next) => {
+  Goat.findById(req.params.id)
     .then(data => res.json(data))
     .catch(next);
 });
 
-goatRouter.put('/api/goat/:id', bearerAuth, getGuardian, jsonParser, (req, res, next) => {
+goatRouter.put('/api/goats/:id', bearerAuth, (req, res, next) => {
   let options = {
     runValidators: true,
     new: true,
   };
-  Guardian.findByIdAndUpdate(req.params.id, req.body, options)
+  Goat.findByIdAndUpdate(req.params.id, req.body, options)
     .then(data => res.json(data))
     .catch(next);
 });
 
-goatRouter.delete('/api/goat/:id', bearerAuth, getGuardian, (req, res, next) => {
-  Guardian.findByIdAndRemove(req.params.id)
+goatRouter.delete('/api/goats/:id', bearerAuth, (req, res, next) => {
+  Goat.findByIdAndRemove(req.params.id)
     .then(() => res.sendStatus(204))
     .catch(next);
 });
