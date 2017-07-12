@@ -91,6 +91,50 @@ describe('testing routes for goat model', () => {
             });
         });
     });
+    it('should return a 415 due to unexpected field', () => {
+      let tempData;
+      let tempAddress = faker.address.streetAddress();
+      let tempCity = faker.address.city();
+      let tempState = faker.address.stateAbbr();
+      let tempStory = faker.lorem.sentence();
+      return mockGuardian.createOne()
+        .then((userGuardData) => {
+          tempData = userGuardData;
+          return superagent.post(`${API_URL}/api/goats`)
+            .set('Authorization', `Bearer ${tempData.user.token}`)
+            .field('address', tempAddress)
+            .field('city', tempCity)
+            .field('state', tempState)
+            .field('story', tempStory)
+            .field('guardianID', tempData.guardian._id.toString())
+            .attach('potato', `${__dirname}/test-assets/goat.jpg`)
+            .catch((res) => {
+              expect(res.status).toEqual(415);
+            });
+        });
+    });
+    it('should return a 400 due to malformed jwt', () => {
+      let tempData;
+      let tempAddress = faker.address.streetAddress();
+      let tempCity = faker.address.city();
+      let tempState = faker.address.stateAbbr();
+      let tempStory = faker.lorem.sentence();
+      return mockGuardian.createOne()
+        .then((userGuardData) => {
+          tempData = userGuardData;
+          return superagent.post(`${API_URL}/api/goats`)
+            .set('Authorization', `Bearer cars`)
+            .field('address', tempAddress)
+            .field('city', tempCity)
+            .field('state', tempState)
+            .field('story', tempStory)
+            .field('guardianID', tempData.guardian._id.toString())
+            .attach('potato', `${__dirname}/test-assets/goat.jpg`)
+            .catch((res) => {
+              expect(res.status).toEqual(400);
+            });
+        });
+    });
   });
   describe('testing GET /api/goats/:id', () => {
     it('should respond with a 200 and a goat message', () => {
