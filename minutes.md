@@ -10,8 +10,10 @@
 
 # Duncan says 'SWEET, Y'ALL KEEP IT UP'
 
-# Stand up day 2
+# Stand Up Day 2
 
-90% done,
-100% and 90% code coverage tomorrow
-thursday do a stretch goal and write readme in the afternoon
+# we are 90% til mvp
+
+# we are working towards 100% and 90% code coverage tomorrow
+
+# by thursday complete at least one stretch goal and write readme in the afternoon
