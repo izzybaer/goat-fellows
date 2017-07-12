@@ -79,7 +79,7 @@
 
 ## POST /api/signup
 
-* The POST route requires the user to provide a username, password, and email, and basic auth gives them a tokenSeed.
+* This POST route requires the user to provide a username, password, and email, and basic auth gives them a tokenSeed.
   * This route will create a new user by providing a username, password, and email address in the body of the request.
   * Creating a new user is required to store and access data later.
   * This request must be completed before attempting to use the api/signup route.
@@ -91,7 +91,15 @@
 
 ## POST /api/goats
 
-* 
+* This POST route is a route that can be created by a guardian and it requires them to provide a city, state, address, photo, and a description of the goat and situation.
+  * This route will create and return a new goat by providing all of the required properties of the goat model.
+  * Once a users guardianID and userID are authenticated with Bearer auth they will be allowed to create a new goat.
+
+## POST /api/guardians
+
+* This POST route is a route that can be created once a user has been created, or a user has signed up and received a tokenSeed.
+  * This route will create and return a new guardian body by providing all of the required properties of the guardian model.
+  * Once a users userID and tokenSeed is authenticated with Bearer auth they will be allowed to create themselves as a new guardian. 
 
 ## GET /api/login
 
@@ -102,14 +110,14 @@
 ## GET /api/goats/:id
 
 * This GET route requires a userID and a guardianID
-  * This route will return a new goat posting on the site, with all of the properties the goat model requires.
-  * Once a users token is verified by Bearer auth they will be allowed to create a post.
+  * This route will return a view of a goat posting on the site, with all of the properties the goat model requires.
+  * Once a users token is verified by Bearer auth they will be allowed to view a goat.
 
 ## GET /api/guardians/:id
 
 * This GET route requires a guardianID
-  * This route will return a new guardian body with all of the properties that the guardian model requires.
-  * Once a users token is verified by Bearer auth they will be allowed to create themselves as a guardian.
+  * This route will return a view of a new guardian body with all of the properties that the guardian model requires.
+  * Once a users token is verified by Bearer auth they will be allowed to view themselves and others as guardians.
 
 
 
