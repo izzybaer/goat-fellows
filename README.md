@@ -99,7 +99,7 @@
 
 * This POST route is a route that can be created once a user has been created, or a user has signed up and received a tokenSeed.
   * This route will create and return a new guardian body by providing all of the required properties of the guardian model.
-  * Once a users userID and tokenSeed is authenticated with Bearer auth they will be allowed to create themselves as a new guardian. 
+  * Once a users userID and tokenSeed is authenticated with Bearer auth they will be allowed to create themselves as a new guardian.
 
 ## GET /api/login
 
@@ -119,6 +119,33 @@
   * This route will return a view of a new guardian body with all of the properties that the guardian model requires.
   * Once a users token is verified by Bearer auth they will be allowed to view themselves and others as guardians.
 
+## PUT /api/goats/:id
+
+* This PUT route requires a guardianID in order to update a goat.
+  * This route will return an updated goat posting with the required properties of the goat model.
+  * The user must be authenticated by Bearer auth in order to update a goat, and in order to be authenticated they need a guardianID.
+  * Once a user has been authenticated by Bearer auth, they will be allowed to update an existing goat post.
+
+## PUT /api/guardians/:id
+
+* This PUT route requires a token in order to update a guardian.
+  * This route will return an updated guardian profile with all of the properties of the guardian model.
+  * The user must be authenticated by Bearer auth in order to update their own 'guardian', in order to be authenticated they must provide the token that they received when they became a user and 'signed up'.
+  * Once a user has been authenticated by Bearer auth they will be allowed to update their guardian profile.
+
+## DELETE /api/goats/:id
+
+* This PUT route requires a guardianID in order to delete a goat from the site.
+  * This route will return a view that the goat has been successfully deleted from the database and website.
+  * The user must be authenticated by Bearer auth in order to delete a goat, and in order to be authenticated they need a guardianID.
+  * Once a user has been authenticated by Bearer auth they will be allowed to delete a goat.
+
+## DELETE /api/guardians/:id
+
+* This DELETE route requires a token in order to delete a guardian.
+  * This route will return a view that their guardian profile with all of the required guardian properties of the guardian model has been successfully deleted.
+  * The user must be authenticated Bearer auth in order to delete their own 'guardian', and in order to be authenticated by Bearer auth they must provide the token that they received when they became a user and 'signed up'.
+  * Once a user has been authenticated by Bearer auth they will be allowed to delete their guardian profile. 
 
 
 
