@@ -17,3 +17,19 @@
 # we are working towards 100% and 90% code coverage tomorrow
 
 # by thursday complete at least one stretch goal and write readme in the afternoon
+
+# STAND UP DAY 3
+
+# we have 95% coverage on lines
+
+# we have 81% coverage on branches
+
+# readme is finished, need to add bio's
+
+# fridays presentation
+
+# tests
+
+# postman requests
+
+# readme
