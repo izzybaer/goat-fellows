@@ -33,6 +33,88 @@
   * open an issue through this github repository and select 'enhancement' as the label.
 * Issues will be reviewed by a moderator weekly.
 
+# Architecture
+
+* This API is structured in a RESTful architecture pattern. The frameworks we used were express.js (middleware, node.js web application framework), node.js (JS runtime built on Chromes V8 JS engine), and mongodb(open source document database for querying and indexing).
+
+# Middleware
+
+* The express router middleware provides us with a base routing capability.
+  * The handle-errors module implements and extends the http-errors npm middleware package.
+  * An auth middleware module leverages two npm modules (jsonwebtoken, bcrypt) and the node.crypto module to provide user sign-up and user login functionality in addition to session authorization and authentication(using basic auth and bearer auth).
+  * The mongoose npm module (that has the worlds worst docs) is used to interact with the mongo database.
+
+# Lib
+
+* This directory holds all of our middleware files that we created as well as our server, including:
+  * basic auth middleware(authorization)
+  * bearer auth middleware(authentication)
+  * error middleware(basic)
+  * s3 upload middleware(streaming multer storage engine for AWS s3)
+
+# Model
+
+* This directory holds our three models:
+  * Goat - contains a mongoose model Schema with properties related to our goat.
+  * Guardian - contains a mongoose model Schema with properties related to our guardian.
+  * User - contains a mongoose model Schema with properties required for a user.
+    * The user Schema has methods attached to it for creating a user, creating a token, creating a tokenSeed, hashing a password, and password hash compare.
+
+# MVP Schema Diagram
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Routes
+
+## POST /api/signup
+
+* The POST route requires the user to provide a username, password, and email, and basic auth gives them a tokenSeed.
+  * This route will create a new user by providing a username, password, and email address in the body of the request.
+  * Creating a new user is required to store and access data later.
+  * This request must be completed before attempting to use the api/signup route.
+
+{"username":"izzybaer", "password":"iLovegoats!2115", "email":"izabellabaer@gmail.com"}
+
+* A token will be returned that will only be used for the api/login route.
+  * After signing in you will receive a new token that will be a reference for all future routes.
+
+## POST /api/goats
+
+* 
+
+## GET /api/login
+
+* This GET route requires an Authorization header, and the user to provide a username and password.
+  * The Authorization header needs to include the username:password of the specific user to be authenticated.
+  * Logging in will return a brand new token that will be used for future user ID reference.
+
+## GET /api/goats/:id
+
+* This GET route requires a userID and a guardianID
+  * This route will return a new goat posting on the site, with all of the properties the goat model requires.
+  * Once a users token is verified by Bearer auth they will be allowed to create a post.
+
+## GET /api/guardians/:id
+
+* This GET route requires a guardianID
+  * This route will return a new guardian body with all of the properties that the guardian model requires.
+  * Once a users token is verified by Bearer auth they will be allowed to create themselves as a guardian.
+
+
+
+
+
 
 
 
