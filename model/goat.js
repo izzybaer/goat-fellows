@@ -11,7 +11,7 @@ const goatSchema = mongoose.Schema({
   photoURI: {type: String, required: true},
   story: {type: String, required: true, minlength: 10, maxlength: 500},
   name: {type: String, minlength: 1, maxlength: 256},
-  gender: {type: Boolean, default: false},
+  gender: {type: Boolean},
   breed: {type: String, minlength: 1, maxlength: 256},
   weight: {type: Number, minlength: 1, maxlength: 256},
   age: {type: Number, minlength: 1, maxlength: 256},

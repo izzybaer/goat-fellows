@@ -9,14 +9,15 @@ mockGoat.createOne = () => {
   let result = {};
   return mockGuardian.createOne()
     .then((guardAndUserData) => {
+      result = guardAndUserData;
       return new Goat({
         address: faker.address.streetAddress(),
         city: faker.address.city(),
         state: faker.address.stateAbbr(),
         photoURI: 'test/test-assets/goat.jpg',
         story: faker.lorem.sentence(),
-        userID: guardAndUserData.user._id,
-        guardianID: guardAndUserData.guardian._id,
+        userID: guardAndUserData.user.user._id.toString(),
+        guardianID: guardAndUserData.guardian._id.toString(),
       })
         .save();
     })

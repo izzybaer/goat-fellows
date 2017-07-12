@@ -1,7 +1,7 @@
 'use strict';
 
 const {Router} = require('express');
-
+const jsonParser = require('body-parser').json();
 const Goat = require('../model/goat.js');
 const bearerAuth = require('../lib/bearer-auth-middleware.js');
 const s3Upload = require('../lib/s3-upload-middleware.js');
@@ -23,7 +23,7 @@ goatRouter.post('/api/goats', bearerAuth, s3Upload('image'), (req, res, next) =>
     weight: req.body.weight,
     age: req.body.age,
     userID: req.user._id.toString(),
-    guardianID: req.body.guardianID.toString(),
+    guardianID: req.body.guardianID,
   })
     .save()
     .then(data => res.json(data))
@@ -32,11 +32,18 @@ goatRouter.post('/api/goats', bearerAuth, s3Upload('image'), (req, res, next) =>
 
 goatRouter.get('/api/goats/:id', bearerAuth, (req, res, next) => {
   Goat.findById(req.params.id)
-    .then(data => res.json(data))
+    .then(data => {
+      if(!data)
+        throw new Error('objectid failed: guardian not found');
+      return res.json(data);
+    })
     .catch(next);
 });
 
-goatRouter.put('/api/goats/:id', bearerAuth, (req, res, next) => {
+goatRouter.put('/api/goats/:id', jsonParser, bearerAuth, (req, res, next) => {
+  let keys = Object.keys(req.body);
+  if (keys.length < 1)
+    return res.sendStatus(400);
   let options = {
     runValidators: true,
     new: true,

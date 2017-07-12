@@ -382,7 +382,6 @@ describe('testing guardian-routes', () => {
           return superagent.delete(`${API_URL}/api/guardians/${tempData.guardian._id}`)
             .set('Authorization', `Bearer ${data.user.token}`)
             .then(res => {
-
               expect(res.status).toEqual(204);
             }).then(res => {
               return superagent.get(`${API_URL}/api/guardians/${tempData.guardian._id}`)
