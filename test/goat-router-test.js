@@ -164,6 +164,44 @@ describe('testing routes for goat model', () => {
             });
         });
     });
+    it('should respond with 404 due to bad :id', () => {
+      let tempData;
+      let tempGoat = {
+        address: faker.address.streetAddress(),
+        city: faker.address.city(),
+        state: faker.address.stateAbbr(),
+        story: faker.lorem.sentence(),
+      };
+      return mockGoat.createOne()
+        .then((userGuardGoatData) => {
+          tempData = userGuardGoatData;
+          return superagent.put(`${API_URL}/api/goats/dogshow`)
+            .set('Authorization', `Bearer ${tempData.user.token}`)
+            .send(tempGoat)
+            .catch((res) => {
+              expect(res.status).toEqual(404);
+            });
+        });
+    });
+    it('should respond with 401 due to no authorization header', () => {
+      let tempData;
+      let tempGoat = {
+        address: faker.address.streetAddress(),
+        city: faker.address.city(),
+        state: faker.address.stateAbbr(),
+        story: faker.lorem.sentence(),
+      };
+      return mockGoat.createOne()
+        .then((userGuardGoatData) => {
+          tempData = userGuardGoatData;
+          return superagent.put(`${API_URL}/api/goats/${userGuardGoatData.goat._id}`)
+            .set('yeaaaaabooooiiii', `Bearer ${tempData.user.token}`)
+            .send(tempGoat)
+            .catch((res) => {
+              expect(res.status).toEqual(401);
+            });
+        });
+    });
   });
   describe('testing DELETE at /api/goats/:id', () => {
     it('should respond with 204 and delete the goat, then a 404 when attempt to GET goat', () => {
@@ -182,6 +220,30 @@ describe('testing routes for goat model', () => {
                 .catch((err) => {
                   expect(err.status).toEqual(404);
                 });
+            });
+        });
+    });
+    it('should respond with 404 due to missing id', () => {
+      let tempData;
+      return mockGoat.createOne()
+        .then((userGuardGoatData) => {
+          tempData = userGuardGoatData;
+          return superagent.delete(`${API_URL}/api/goats/uhohspaghettios`)
+            .set('Authorization', `Bearer ${tempData.user.token}`)
+            .catch((res) => {
+              expect(res.status).toEqual(404);
+            });
+        });
+    });
+    it('should respond with 401 due to bad auth', () => {
+      let tempData;
+      return mockGoat.createOne()
+        .then((userGuardGoatData) => {
+          tempData = userGuardGoatData;
+          return superagent.delete(`${API_URL}/api/goats/${userGuardGoatData.goat._id}`)
+            .set('potatohouse', `Bearer ${tempData.user.token}`)
+            .catch((res) => {
+              expect(res.status).toEqual(401);
             });
         });
     });
