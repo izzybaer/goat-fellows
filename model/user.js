@@ -37,12 +37,9 @@ userSchema.methods.tokenSeedCreate = function () {
       this.save()
         .then(() => resolve(this))
         .catch((err) => {
-          if (err.message.toLowerCase().includes('validation'))
-            return reject(new Error('validation failed'));
-          if (err.message.toLowerCase().includes('duplicate key'))
-            return reject(new Error('duplicate key'));
-          if (tries < 1)
-            return reject(new Error('server failed to create tokenSeed'));
+          if (err.message.toLowerCase().includes('validation'))  return reject(new Error('validation failed'));
+          if (err.message.toLowerCase().includes('duplicate key'))  return reject(new Error('duplicate key'));
+          if (tries < 1)  return reject(new Error('server failed to create tokenSeed'));
           tries--;
           _tokenSeedCreate();
         });
