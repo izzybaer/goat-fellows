@@ -12,7 +12,26 @@
 
 # The Current Version (0.0.1)
 
-*  
+* The current version of this program is designed to create, read, update, and destroy data that is used to add new users, add new guardians, and add new goats.
+
+* This API is designed to be versatile so that anyone can become users, and then become guardians, and then add goats. Before anyone can add a goat they must first become a user and get a tokenSeed. Before anyone can become a guardian, they must first become a user. Before anyone can view guardians and view goats, they must first become a user.
+
+# Future Releases
+
+* V 1.0.0 scheduled to be released 9/25/2017 will include the following:
+
+  * store and return detailed lists of specific people by location who can provide specific services.
+  * store and return detailed lists of specific people by location.
+  * store and return detailed lists of goats in need by location.
+  * store and return detailed lists of goats who have been helped and provided for by specific people by location.
+
+# Contribution
+
+* Reporting bugs:
+  * open an issue through this github repository and select 'bug' as the label.
+* Recommended enhancements or updates:
+  * open an issue through this github repository and select 'enhancement' as the label.
+* Issues will be reviewed by a moderator weekly.
 
 
 
