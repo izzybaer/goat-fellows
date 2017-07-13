@@ -7,7 +7,7 @@
 
 * Currently, there is not a site that exists that allows people to become 'Guardians' (people able to provide services that help goats become rescued, get medical attention, and be fostered), and to add 'Goats' that need help of some sort. This site also provides people the ability to see other people who are Guardians in their city/state and see goats that need some kind of help in their city/state.
 
-* There are a lot of websites in existence currently that are tied to one specific goat or animal rescue that provide users the ability to donate and volunteer at that rescue. There is no site that provides users all across the United States to connect with others in their location, and provide services to goats that need help in their location.
+* There are a lot of websites currently in existence that are tied to one specific goat or animal rescue that provide users the ability to donate and volunteer at that rescue. There is no site that provides users all across the United States to connect with others in their location, and provide services to goats that need help in their location.
 
 * The purpose of our API and supporting infrastructure is to encourage developers to create applications that provide value to the lives of all animals in the United States without advocates or someone to stand for them. It also provides value to the lives of the vast number of people who care about animals and animal welfare.
 
@@ -168,6 +168,21 @@
 
   * Once a user has been authenticated by Bearer auth they will be allowed to update their guardian profile.
 
+### PUT /api/users/:id
+&nbsp;
+
+* This PUT route requires a token in order to update the user.
+
+  * This route will return an updated user profile with all of the required properties of the user:
+
+
+* `{"username":"piedpiper2017", "password":"aviatOH!2115", "email":"veritcal@gmail.com"}`
+
+  * The user must be authenticated by Bearer auth in order to update their own 'user' profile.
+
+  * In order to be authenticated they must provide the token that they received from Bearer auth when they became a user and first 'signed up'.
+
+
 ### DELETE /api/goats/:id
 &nbsp;
 
@@ -186,11 +201,25 @@
 
   * This route will return a view that their guardian profile with all of the required guardian properties of the guardian model has been successfully deleted.
 
-  * The user must be authenticated Bearer auth in order to delete their own 'guardian', and in order to be authenticated by Bearer auth they must provide the token that they received when they became a user and 'signed up'.
+  * The user must be authenticated Bearer auth in order to delete their own 'guardian'.
+
+  * In order to be authenticated by Bearer auth they must provide the token that they received when they became a user and 'signed up'.
 
   * Once a user has been authenticated by Bearer auth they will be allowed to delete their guardian profile.
 
-# **Meet The Team**
+### DELETE /api/users/:id
+&nbsp;
+
+* This DELETE route requires a token in order to delete a user.
+
+  * This route will return a deleted user.
+
+  * The user must be authenticated by Bearer auth in order to delete their own 'user' profile.
+
+  * In order to be authenticated they must provide the token that they received from Bearer auth when they became a user and first 'signed up'.
+
+
+# **The hackers of Aviato**
 &nbsp;
 
 ## **Michael Porter**
