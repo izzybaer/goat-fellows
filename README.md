@@ -193,10 +193,53 @@
 # **Meet The Team**
 &nbsp;
 
-![Michael-Porter](){:class="img-responsive"}{:height="px" width="px"}
+## **Michael Porter**
+![Michael-Porter](temp-assets/mikeporter.jpg)
 
-![Dustin-Byers](){:class="img-responsive"}{:height="px" width="px"}
+My name is Michael Porter.  
+I started learning to code while studying in graduate school.  
+I loved learning how to break down problems and how to build reusable tools.  
+I want to work on refining the techniques and skills I've acquired to build products   
+faster and to make myself a better programmer.
+&nbsp;
 
-![Michael-Miller](){:class="img-responsive"}{:height="px" width="px"}
+## **Dustin Byers**
+![Dustin-Byers](temp-assets/dustinbyers.jpg)
 
-![Izzy-Baer](){:class="img-responsive"}{:height="px" width="px"}
+Enjoys tech, science, and most things geeky.   
+Always loved to code, and learn how things work.   
+First words were "syn ack, syn ack,  
+ack-ack-ack-ack-ack-ack-ack-ack-ack-fin-ack,  
+fin ack".
+&nbsp;
+
+## **Michael Miller**
+![Michael-Miller](temp-assets/mikemiller.jpg)
+
+My name's Michael Miller.  
+I enjoy four things above all else: family, soccer, music, and writing code.   
+I have a real passion for collaboration; working together with a team to  
+achieve a clean, organized, and impactful end product.  
+My primary focus has been on JavaScript but I enjoy learning new languages  
+and libraries in my spare time and as needed for given projects.  
+&nbsp;
+
+## **Izzy Baer**
+![Izzy-Baer](temp-assets/izzybaer.jpg)
+
+Hey y'all, I'm Izabella Baer, but you can call me Izzy.  
+I have a BA in Arabic and Sociology;  
+now I'm a full stack JavaScript Developer.    
+I'm going to use my language skills to create unique user experiences  
+for as many people as possible, all around the world.  
+&nbsp;
+&nbsp;
+&nbsp;
+
+
+
+
+
+
+
+&copy; Goat Fellows  
