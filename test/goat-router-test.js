@@ -291,5 +291,19 @@ describe('testing routes for goat model', () => {
             });
         });
     });
+    it('should respond with 400 due to lack of keys', () => {
+      let tempData;
+      let tempGoat = {};
+      return mockGoat.createOne()
+        .then((userGuardGoatData) => {
+          tempData = userGuardGoatData;
+          return superagent.put(`${API_URL}/api/goats/${userGuardGoatData.goat._id}`)
+            .set('Authorization', `Bearer ${tempData.user.token}`)
+            .send(tempGoat)
+            .catch((res) => {
+              expect(res.status).toEqual(400);
+            });
+        });
+    });
   });
 });
