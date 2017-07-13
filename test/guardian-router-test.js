@@ -87,7 +87,6 @@ describe('testing guardian-routes', () => {
             state: faker.address.stateAbbr(),
             service: faker.company.bsBuzz(),
             phoneNumber: faker.phone.phoneNumber(),
-
           };
           return superagent.post(`${API_URL}/api/guardians`)
             .set('Authorization', `Bearer ${user.token}`)
@@ -106,7 +105,6 @@ describe('testing guardian-routes', () => {
             state: faker.address.stateAbbr(),
             service: faker.company.bsBuzz(),
             phoneNumber: faker.phone.phoneNumber(),
-
           };
           return superagent.post(`${API_URL}/api/guardians`)
             .set('Authorization', `Bearer ${user.token}`)
@@ -125,7 +123,6 @@ describe('testing guardian-routes', () => {
             state: faker.address.stateAbbr(),
             service: faker.company.bsBuzz(),
             phoneNumber: faker.phone.phoneNumber(),
-
           };
           return superagent.post(`${API_URL}/api/guardians`)
             .set('Authorization', `Bearer ${user.token}`)
@@ -144,7 +141,6 @@ describe('testing guardian-routes', () => {
             city: faker.address.city(),
             service: faker.company.bsBuzz(),
             phoneNumber: faker.phone.phoneNumber(),
-
           };
           return superagent.post(`${API_URL}/api/guardians`)
             .set('Authorization', `Bearer ${user.token}`)
@@ -163,7 +159,6 @@ describe('testing guardian-routes', () => {
             city: faker.address.city(),
             state: faker.address.stateAbbr(),
             phoneNumber: faker.phone.phoneNumber(),
-
           };
           return superagent.post(`${API_URL}/api/guardians`)
             .set('Authorization', `Bearer ${user.token}`)
@@ -182,13 +177,108 @@ describe('testing guardian-routes', () => {
             city: faker.address.city(),
             state: faker.address.stateAbbr(),
             service: faker.company.bsBuzz(),
-
           };
           return superagent.post(`${API_URL}/api/guardians`)
             .set('Authorization', `Bearer ${user.token}`)
             .send(tempGuardian)
             .catch((res) => {
               expect(res.status).toEqual(400);
+            });
+        });
+    });
+    it('should return a POST 401 due to no bearer encoded', () => {
+      return mockUser.createOne()
+        .then((user) => {
+          let tempGuardian = {
+            firstName: faker.name.firstName(),
+            lastName: faker.name.lastName(),
+            city: faker.address.city(),
+            state: faker.address.stateAbbr(),
+            service: faker.company.bsBuzz(),
+            phoneNumber: faker.phone.phoneNumber(),
+          };
+          return superagent.post(`${API_URL}/api/guardians`)
+            .set('Authorization', `Bearer `)
+            .send(tempGuardian)
+            .catch((res) => {
+              expect(res.status).toEqual(401);
+            });
+        });
+    });
+    it('should return a POST 400 due to malformed jwt', () => {
+      return mockUser.createOne()
+        .then((user) => {
+          let tempGuardian = {
+            firstName: faker.name.firstName(),
+            lastName: faker.name.lastName(),
+            city: faker.address.city(),
+            state: faker.address.stateAbbr(),
+            service: faker.company.bsBuzz(),
+            phoneNumber: faker.phone.phoneNumber(),
+          };
+          return superagent.post(`${API_URL}/api/guardians`)
+            .set('Authorization', `Bearer car`)
+            .send(tempGuardian)
+            .catch((res) => {
+              expect(res.status).toEqual(400);
+            });
+        });
+    });
+    it('should return a POST 401 due to no authorization', () => {
+      return mockUser.createOne()
+        .then((user) => {
+          let tempGuardian = {
+            firstName: faker.name.firstName(),
+            lastName: faker.name.lastName(),
+            city: faker.address.city(),
+            state: faker.address.stateAbbr(),
+            service: faker.company.bsBuzz(),
+            phoneNumber: faker.phone.phoneNumber(),
+          };
+          return superagent.post(`${API_URL}/api/guardians`)
+            .set('dyno', `Bearer ${user.token}`)
+            .send(tempGuardian)
+            .catch((res) => {
+              expect(res.status).toEqual(401);
+            });
+        });
+    });
+    it('should return a POST 401 due to invalid signature bad user.token', () => {
+      return mockUser.createOne()
+        .then((user) => {
+          let tempGuardian = {
+            firstName: faker.name.firstName(),
+            lastName: faker.name.lastName(),
+            city: faker.address.city(),
+            state: faker.address.stateAbbr(),
+            service: faker.company.bsBuzz(),
+            phoneNumber: faker.phone.phoneNumber(),
+          };
+          return superagent.post(`${API_URL}/api/guardians`)
+            .set('Authorization', `Bearer ${user.token}d`)
+            .send(tempGuardian)
+            .catch((res) => {
+              expect(res.status).toEqual(401);
+            });
+        });
+    });
+    it('should return a POST 401 due to invalid token', () => {
+      return mockUser.createOne()
+        .then((user) => {
+          let tempGuardian = {
+            firstName: faker.name.firstName(),
+            lastName: faker.name.lastName(),
+            city: faker.address.city(),
+            state: faker.address.stateAbbr(),
+            service: faker.company.bsBuzz(),
+            phoneNumber: faker.phone.phoneNumber(),
+          };
+          let fakeToken = user.token.slice(1, -1);
+          return superagent.post(`${API_URL}/api/guardians`)
+            .set('Authorization', `Bearer ${'a'.concat(fakeToken)}`)
+            .send(tempGuardian)
+            .catch((res) => {
+              expect(res.status).toEqual(401);
             });
         });
     });
@@ -202,7 +292,6 @@ describe('testing guardian-routes', () => {
             state: faker.address.stateAbbr(),
             service: faker.company.bsBuzz(),
             phoneNumber: faker.phone.phoneNumber(),
-
           };
           return superagent.post(`${API_URL}/api/guardians`)
             .send(tempGuardian)
@@ -403,6 +492,8 @@ describe('testing guardian-routes', () => {
             });
         });
     });
+  });
+  describe('testing edge cases', () => {
     it('should respond with a 404 for bad ID', () => {
       return mockGuardian.createOne()
         .then(data => {

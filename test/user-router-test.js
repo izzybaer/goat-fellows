@@ -26,21 +26,7 @@ describe('testing user auth routes', () => {
           expect(res.text).toExist();
         });
     });
-    //////////////////////////////////////////////////
-    // it('should respond with a ???? status due to tries failing on user create', () => {
-    //   let tempUser = {
-    //     email: faker.internet.email(),
-    //     username: faker.internet.userName(),
-    //     password: faker.internet.password(),
-    //   };
-    //
-    //   return superagent.post(`${API_URL}/api/signup`)
-    //     .send(tempUser)
-    //     .then((res) => {
-    //       expect(res.status).toEqual(400);
-    //       // expect(res.text).toExist();
-    //     });
-    // });
+
     it('should respond with a 400 status due to missing email', () => {
       return superagent.post(`${API_URL}/api/signup`)
         .send({
@@ -145,6 +131,17 @@ describe('testing user auth routes', () => {
         });
     });
 
+    it('Should return 401 unauthorized due to no encoded value', () => {
+      return mockUser.createOne()
+        .then(userData => {
+          return superagent.get(`${API_URL}/api/login`)
+            .set('Authorization', `Basic `);
+        })
+        .catch(res => {
+          expect(res.status).toEqual(401);
+        });
+    });
+
     it('Should return 401 due to bad basic.', () => {
       return mockUser.createOne()
         .then(userData => {
@@ -153,6 +150,169 @@ describe('testing user auth routes', () => {
             .set('goat', `L33t ${encoded}`);
         })
         .catch(res => {
+          expect(res.status).toEqual(401);
+        });
+    });
+  });
+
+  describe('testing PUT on /api/users/:id', () => {
+    it('should respond with a 200', () => {
+      let tempUser;
+      let fakeUser = {
+        email: 'potatoSDFAS@email.com',
+        username: 'carhatadgasd',
+        password: 'dynomite',
+      };
+      return mockUser.createOne()
+        .then((userData) => {
+          tempUser = userData;
+          return superagent.put(`${API_URL}/api/users/${tempUser.user._id}`)
+            .set(`Authorization`, `Bearer ${tempUser.token}`)
+            .send(fakeUser);
+        })
+        .then(res => {
+          expect(res.status).toEqual(200);
+          expect(res.body.username).toEqual(fakeUser.username);
+          expect(res.body.password).toExist();
+          expect(res.body.password).toNotEqual(tempUser.password);
+          expect(res.body.email).toEqual(fakeUser.email);
+          expect(res.body.userID).toEqual(tempUser.user.userID);
+        });
+    });
+    it('should respond with a 400 due to empty body', () => {
+      let tempUser;
+      return mockUser.createOne()
+        .then((userData) => {
+          tempUser = userData;
+          return superagent.put(`${API_URL}/api/users/${tempUser.user._id}`)
+            .set(`Authorization`, `Bearer ${tempUser.token}`)
+            .send({});
+        })
+        .catch(res => {
+          expect(res.status).toEqual(400);
+        });
+    });
+    it('should respond with a 401 due to bad token', () => {
+      let tempUser;
+      let fakeUser = {
+        email: 'potatoSDFAS@email.com',
+        username: 'carhatadgasd',
+        password: 'dynomite',
+      };
+      return mockUser.createOne()
+        .then((userData) => {
+          tempUser = userData;
+          return superagent.put(`${API_URL}/api/users/${tempUser.user._id}`)
+            .set(`Authorization`, `Bearer ${tempUser.token}d`)
+            .send(fakeUser);
+        })
+        .catch(res => {
+          expect(res.status).toEqual(401);
+        });
+    });
+    it('should respond with a 401 due to no auth header', () => {
+      let tempUser;
+      let fakeUser = {
+        email: 'potatoSDFAS@email.com',
+        username: 'carhatadgasd',
+        password: 'dynomite',
+      };
+      return mockUser.createOne()
+        .then((userData) => {
+          tempUser = userData;
+          return superagent.put(`${API_URL}/api/users/${tempUser.user._id}`)
+            .set(`FakeFake`, `Bearer ${tempUser.token}`)
+            .send(fakeUser);
+        })
+        .catch(res => {
+          expect(res.status).toEqual(401);
+        });
+    });
+    it('should respond with a 401 due to no bearer', () => {
+      let tempUser;
+      let fakeUser = {
+        email: 'potatoSDFAS@email.com',
+        username: 'carhatadgasd',
+        password: 'dynomite',
+      };
+      return mockUser.createOne()
+        .then((userData) => {
+          tempUser = userData;
+          return superagent.put(`${API_URL}/api/users/${tempUser.user._id}`)
+            .set(`Authorization`, `Bearer `)
+            .send(fakeUser);
+        })
+        .catch(res => {
+          expect(res.status).toEqual(401);
+        });
+    });
+  });
+
+  describe('testing DELETE on /api/users/:id', () => {
+    it('should respond with a PUT 204 then a get 401 unauthorized due to invalid token', () => {
+      let tempUser;
+      return mockUser.createOne()
+        .then((userData) => {
+          tempUser = userData;
+          return superagent.delete(`${API_URL}/api/users/${tempUser.user._id}`)
+            .set(`Authorization`, `Bearer ${tempUser.token}`);
+        })
+        .then((res) => {
+          expect(res.status).toEqual(204);
+        })
+        .then((res) => {
+          return superagent.delete(`${API_URL}/api/users/${tempUser.user._id}`)
+            .set(`Authorization`, `Bearer ${tempUser.token}`);
+        })
+        .catch((res) => {
+          expect(res.status).toEqual(401);
+        });
+    });
+    it('should respond with a PUT 404 due to bad id in url', () => {
+      let tempUser;
+      return mockUser.createOne()
+        .then((userData) => {
+          tempUser = userData;
+          return superagent.delete(`${API_URL}/api/users/adfasd`)
+            .set(`Authorization`, `Bearer ${tempUser.token}`);
+        })
+        .catch((res) => {
+          expect(res.status).toEqual(404);
+        });
+    });
+    it('should respond with a PUT 401 due to no auth header', () => {
+      let tempUser;
+      return mockUser.createOne()
+        .then((userData) => {
+          tempUser = userData;
+          return superagent.delete(`${API_URL}/api/users/${tempUser.user._id}`)
+            .set(`yippie`, `Bearer ${tempUser.token}`);
+        })
+        .catch((res) => {
+          expect(res.status).toEqual(401);
+        });
+    });
+    it('should respond with a PUT 401 due to bad token', () => {
+      let tempUser;
+      return mockUser.createOne()
+        .then((userData) => {
+          tempUser = userData;
+          return superagent.delete(`${API_URL}/api/users/${tempUser.user._id}`)
+            .set(`Authorization`, `Bearer ${tempUser.token}d`);
+        })
+        .catch((res) => {
+          expect(res.status).toEqual(401);
+        });
+    });
+    it('should respond with a PUT 401 due no token', () => {
+      let tempUser;
+      return mockUser.createOne()
+        .then((userData) => {
+          tempUser = userData;
+          return superagent.delete(`${API_URL}/api/users/${tempUser.user._id}`)
+            .set(`Authorization`, `Bearer `);
+        })
+        .catch((res) => {
           expect(res.status).toEqual(401);
         });
     });
@@ -194,11 +354,5 @@ describe('testing user auth routes', () => {
             });
         });
     });
-    //   return superagent.get(`${API_URL}/bleh`)
-    //     .catch(res => {
-    //       expect(res.status).toEqual(409);
-    //     });
-    // });
-
   });
 });

@@ -1,7 +1,6 @@
 'use strict';
 
 const {Router} = require('express');
-
 const jsonParser = require('body-parser').json();
 const Guardian = require('../model/guardian.js');
 const bearerAuth = require('../lib/bearer-auth-middleware.js');
