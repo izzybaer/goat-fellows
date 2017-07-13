@@ -26,6 +26,21 @@ describe('testing user auth routes', () => {
           expect(res.text).toExist();
         });
     });
+    //////////////////////////////////////////////////
+    // it('should respond with a ???? status due to tries failing on user create', () => {
+    //   let tempUser = {
+    //     email: faker.internet.email(),
+    //     username: faker.internet.userName(),
+    //     password: faker.internet.password(),
+    //   };
+    //
+    //   return superagent.post(`${API_URL}/api/signup`)
+    //     .send(tempUser)
+    //     .then((res) => {
+    //       expect(res.status).toEqual(400);
+    //       // expect(res.text).toExist();
+    //     });
+    // });
     it('should respond with a 400 status due to missing email', () => {
       return superagent.post(`${API_URL}/api/signup`)
         .send({

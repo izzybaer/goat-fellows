@@ -81,7 +81,7 @@
 
 ### MVP Schema Diagram
 
-![goat-fellows-schema](temp-assets/Goat-Fellows-Schema.png){:class="img-responsive"}{:height="480px" width="588px"}
+![goat-fellows-schema](temp-assets/Goat-Fellows-Schema.png)
 
 ## **Routes**
 

@@ -407,7 +407,6 @@ describe('testing guardian-routes', () => {
           expect(res.body.userID).toEqual(tempData.guardian.userID);
         });
     });
-
     it('Should respond with a 400 bad values', () => {
       let tempData;
       return mockGuardian.createOne()

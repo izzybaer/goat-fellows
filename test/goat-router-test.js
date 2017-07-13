@@ -49,6 +49,28 @@ describe('testing routes for goat model', () => {
             });
         });
     });
+
+    it('should respond with a 400 due to no image.', () => {
+      let tempData;
+      let tempAddress = faker.address.streetAddress();
+      let tempCity = faker.address.city();
+      let tempState = faker.address.stateAbbr();
+      let tempStory = faker.lorem.sentence();
+      return mockGuardian.createOne()
+        .then((userGuardData) => {
+          tempData = userGuardData;
+          return superagent.post(`${API_URL}/api/goats`)
+            .set('Authorization', `Bearer ${tempData.user.token}`)
+            .field('address', tempAddress)
+            .field('city', tempCity)
+            .field('state', tempState)
+            .field('story', tempStory)
+            .field('guardianID', tempData.guardian._id.toString())
+            .catch((res) => {
+              expect(res.status).toEqual(400);
+            });
+        });
+    });
     it('should return a 400 error due to missing field address', () => {
       let tempData;
       let tempCity = faker.address.city();
@@ -288,6 +310,20 @@ describe('testing routes for goat model', () => {
             .set('potatohouse', `Bearer ${tempData.user.token}`)
             .catch((res) => {
               expect(res.status).toEqual(401);
+            });
+        });
+    });
+    it('should respond with 400 due to lack of keys', () => {
+      let tempData;
+      let tempGoat = {};
+      return mockGoat.createOne()
+        .then((userGuardGoatData) => {
+          tempData = userGuardGoatData;
+          return superagent.put(`${API_URL}/api/goats/${userGuardGoatData.goat._id}`)
+            .set('Authorization', `Bearer ${tempData.user.token}`)
+            .send(tempGoat)
+            .catch((res) => {
+              expect(res.status).toEqual(400);
             });
         });
     });
