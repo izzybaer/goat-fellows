@@ -49,6 +49,28 @@ describe('testing routes for goat model', () => {
             });
         });
     });
+
+    it('should respond with a 400 due to no image.', () => {
+      let tempData;
+      let tempAddress = faker.address.streetAddress();
+      let tempCity = faker.address.city();
+      let tempState = faker.address.stateAbbr();
+      let tempStory = faker.lorem.sentence();
+      return mockGuardian.createOne()
+        .then((userGuardData) => {
+          tempData = userGuardData;
+          return superagent.post(`${API_URL}/api/goats`)
+            .set('Authorization', `Bearer ${tempData.user.token}`)
+            .field('address', tempAddress)
+            .field('city', tempCity)
+            .field('state', tempState)
+            .field('story', tempStory)
+            .field('guardianID', tempData.guardian._id.toString())
+            .catch((res) => {
+              expect(res.status).toEqual(400);
+            });
+        });
+    });
     it('should return a 400 error due to missing field address', () => {
       let tempData;
       let tempCity = faker.address.city();
