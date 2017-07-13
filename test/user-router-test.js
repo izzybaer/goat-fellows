@@ -130,6 +130,17 @@ describe('testing user auth routes', () => {
         });
     });
 
+    it('Should return 401 unauthorized due to no encoded value', () => {
+      return mockUser.createOne()
+        .then(userData => {
+          return superagent.get(`${API_URL}/api/login`)
+            .set('Authorization', `Basic `);
+        })
+        .catch(res => {
+          expect(res.status).toEqual(401);
+        });
+    });
+
     it('Should return 401 due to bad basic.', () => {
       return mockUser.createOne()
         .then(userData => {
@@ -179,11 +190,5 @@ describe('testing user auth routes', () => {
             });
         });
     });
-    //   return superagent.get(`${API_URL}/bleh`)
-    //     .catch(res => {
-    //       expect(res.status).toEqual(409);
-    //     });
-    // });
-
   });
 });
