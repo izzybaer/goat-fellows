@@ -113,7 +113,7 @@ describe('testing routes for goat model', () => {
             });
         });
     });
-    it('should return a 415 due to unexpected field', () => {
+    it('should return a 400 due to unexpected field', () => {
       let tempData;
       let tempAddress = faker.address.streetAddress();
       let tempCity = faker.address.city();
@@ -131,7 +131,7 @@ describe('testing routes for goat model', () => {
             .field('guardianID', tempData.guardian._id.toString())
             .attach('potato', `${__dirname}/test-assets/goat.jpg`)
             .catch((res) => {
-              expect(res.status).toEqual(415);
+              expect(res.status).toEqual(400);
             });
         });
     });
