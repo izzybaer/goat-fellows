@@ -15,6 +15,7 @@ describe('testing user auth routes', () => {
   afterEach(clearDB);
   describe('testing POST at /api/signup', () => {
     it('should respond with a 200 status and a token', () => {
+      server.start();
       return superagent.post(`${API_URL}/api/signup`)
         .send({
           email: faker.internet.email(),
@@ -355,4 +356,5 @@ describe('testing user auth routes', () => {
         });
     });
   });
+  server.stop();
 });
