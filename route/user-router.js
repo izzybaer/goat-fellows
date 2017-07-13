@@ -24,7 +24,6 @@ authRouter.get('/api/login', basicAuth, (req, res, next) => {
 });
 
 authRouter.put('/api/users/:id', jsonParser, bearerAuth, (req, res, next) => {
-  console.log('*************************')
   let keys = Object.keys(req.body);
   if (keys.length < 1)
     return res.sendStatus(400);
@@ -32,13 +31,13 @@ authRouter.put('/api/users/:id', jsonParser, bearerAuth, (req, res, next) => {
     runValidators: true,
     new: true,
   };
-  authRouter.findByIdAndUpdate(req.params.id, req.body, options)
+  User.findByIdAndUpdate(req.params.id, req.body, options)
     .then(data => res.json(data))
     .catch(next);
 });
 
 authRouter.delete('/api/users/:id', bearerAuth, (req, res, next) => {
-  authRouter.findByIdAndRemove(req.params.id)
+  User.findByIdAndRemove(req.params.id)
     .then(() => res.sendStatus(204))
     .catch(next);
 });

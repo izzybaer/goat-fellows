@@ -165,30 +165,90 @@ describe('testing user auth routes', () => {
       return mockUser.createOne()
         .then((userData) => {
           tempUser = userData;
-          console.log(tempUser.token)
           return superagent.put(`${API_URL}/api/users/${tempUser.user._id}`)
             .set(`Authorization`, `Bearer ${tempUser.token}`)
             .send(fakeUser);
         })
         .then(res => {
           expect(res.status).toEqual(200);
-          expect(res.body.username).toEqual(fakeUser.firstName);
-          expect(res.body.password).toEqual(fakeUser.lastName);
-          expect(res.body.email).toEqual(fakeUser.guardian.email);
-          expect(res.body.userID).toEqual(tempUser.guardian.userID);
+          expect(res.body.username).toEqual(fakeUser.username);
+          expect(res.body.password).toExist();
+          expect(res.body.password).toNotEqual(tempUser.password);
+          expect(res.body.email).toEqual(fakeUser.email);
+          expect(res.body.userID).toEqual(tempUser.user.userID);
         });
     });
   });
 
-  // describe('testing DELETE on /api/users/:id', () => {
-  //   it('should respond with a PUT 204 then a get 404', () => {
-  //     let tempUser;
-  //     return mockUser.createOne()
-  //       .then((userData) => {
-  //
-  //       })
-  //   })
-  // });
+  describe('testing DELETE on /api/users/:id', () => {
+    it('should respond with a PUT 204 then a get 401 unauthorized due to invalid token', () => {
+      let tempUser;
+      return mockUser.createOne()
+        .then((userData) => {
+          tempUser = userData;
+          return superagent.delete(`${API_URL}/api/users/${tempUser.user._id}`)
+            .set(`Authorization`, `Bearer ${tempUser.token}`);
+        })
+        .then((res) => {
+          expect(res.status).toEqual(204);
+        })
+        .then((res) => {
+          return superagent.delete(`${API_URL}/api/users/${tempUser.user._id}`)
+            .set(`Authorization`, `Bearer ${tempUser.token}`);
+        })
+        .catch((res) => {
+          expect(res.status).toEqual(401);
+        });
+    });
+    it('should respond with a PUT 404 due to bad id in url', () => {
+      let tempUser;
+      return mockUser.createOne()
+        .then((userData) => {
+          tempUser = userData;
+          return superagent.delete(`${API_URL}/api/users/adfasd`)
+            .set(`Authorization`, `Bearer ${tempUser.token}`);
+        })
+        .catch((res) => {
+          expect(res.status).toEqual(404);
+        });
+    });
+    it('should respond with a PUT 401 due to no auth header', () => {
+      let tempUser;
+      return mockUser.createOne()
+        .then((userData) => {
+          tempUser = userData;
+          return superagent.delete(`${API_URL}/api/users/${tempUser.user._id}`)
+            .set(`yippie`, `Bearer ${tempUser.token}`);
+        })
+        .catch((res) => {
+          expect(res.status).toEqual(401);
+        });
+    });
+    it('should respond with a PUT 401 due to bad token', () => {
+      let tempUser;
+      return mockUser.createOne()
+        .then((userData) => {
+          tempUser = userData;
+          return superagent.delete(`${API_URL}/api/users/${tempUser.user._id}`)
+            .set(`Authorization`, `Bearer ${tempUser.token}d`);
+        })
+        .catch((res) => {
+          expect(res.status).toEqual(401);
+        });
+    });
+    it('should respond with a PUT 401 due no token', () => {
+      let tempUser;
+      return mockUser.createOne()
+        .then((userData) => {
+          tempUser = userData;
+          return superagent.delete(`${API_URL}/api/users/${tempUser.user._id}`)
+            .set(`Authorization`, `Bearer `);
+        })
+        .catch((res) => {
+          expect(res.status).toEqual(401);
+        });
+    });
+  });
 
   describe('testing catch all 404s', () => {
     it('should return 404 /api/*', () => {
