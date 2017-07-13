@@ -504,5 +504,11 @@ describe('testing guardian-routes', () => {
             });
         });
     });
+    it('should respond with a serverstart', () => {
+      return server.start()
+        .catch((err) => {
+          expect(err.message).toEqual('Server is already started');
+        });
+    });
   });
 });
