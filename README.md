@@ -1,5 +1,5 @@
-# **Goat Fellows**
-## The RESTful API built for people who love goats
+# **Goat Fellows** :goat:
+## The RESTful API for people who love goats. [![Build Status](https://travis-ci.org/izzybaer/goat-fellows.svg?branch=master)](https://travis-ci.org/izzybaer/goat-fellows)
 
 ### Overview
 
@@ -22,16 +22,23 @@
 * V 1.0.0 scheduled to be released 9/25/2017 will include the following:
 
   * store and return detailed lists of specific people by location who can provide specific services.
+
   * store and return detailed lists of specific people by location.
+
   * store and return detailed lists of goats in need by location.
+
   * store and return detailed lists of goats who have been helped and provided for by specific people by location.
 
 ### Contributions
 
 * Reporting bugs:
   * open an issue through this github repository and select 'bug' as the label.
+
+
 * Recommended enhancements or updates:
   * open an issue through this github repository and select 'enhancement' as the label.
+
+
 * Issues will be reviewed by a moderator weekly.
 
 ### Architecture
@@ -41,152 +48,155 @@
 ### Middleware
 
 * The express router middleware provides us with a base routing capability.
+
   * The handle-errors module implements and extends the http-errors npm middleware package.
+
   * An auth middleware module leverages two npm modules (jsonwebtoken, bcrypt) and the node.crypto module to provide user sign-up and user login functionality in addition to session authorization and authentication(using basic auth and bearer auth).
+
   * The mongoose npm module (that has the worlds worst docs) is used to interact with the mongo database.
 
 ### Lib
 
 * This directory holds all of our middleware files that we created as well as our server, including:
+
   * basic auth middleware(authorization)
+
   * bearer auth middleware(authentication)
+
   * error middleware(basic)
+
   * s3 upload middleware(streaming multer storage engine for AWS s3)
 
 ### Model
 
 * This directory holds our three models:
-  * Goat - contains a mongoose model Schema with properties related to our goat.
-  * Guardian - contains a mongoose model Schema with properties related to our guardian.
-  * User - contains a mongoose model Schema with properties required for a user.
+
+  * **Goat** - contains a mongoose model Schema with properties related to our goat.
+
+  * **Guardian** - contains a mongoose model Schema with properties related to our guardian.
+
+  * **User** - contains a mongoose model Schema with properties required for a user.
+
     * The user Schema has methods attached to it for creating a user, creating a token, creating a tokenSeed, hashing a password, and password hash compare.
 
 ### MVP Schema Diagram
 
-
-
-
-
-
-
-
-
-
-
-
-
+![goat-fellows-schema](temp-assets/Goat-Fellows-Schema.png){:class="img-responsive"}{:height="480px" width="588px"}
 
 ## **Routes**
 
 ### POST /api/signup
+&nbsp;
 
 * This POST route requires the user to provide a username, password, and email, and basic auth gives them a tokenSeed.
+
   * This route will create a new user by providing a username, password, and email address in the body of the request.
+
   * Creating a new user is required to store and access data later.
   * This request must be completed before attempting to use the api/signup route.
 
-{"username":"izzybaer", "password":"iLovegoats!2115", "email":"izabellabaer@gmail.com"}
+`{"username":"izzybaer", "password":"iLovegoats!2115", "email":"izabellabaer@gmail.com"}`
 
 * A token will be returned that will only be used for the api/login route.
+
   * After signing in you will receive a new token that will be a reference for all future routes.
 
 ### POST /api/goats
+&nbsp;
 
 * This POST route is a route that can be created by a guardian and it requires them to provide a city, state, address, photo, and a description of the goat and situation.
+
   * This route will create and return a new goat by providing all of the required properties of the goat model.
+
   * Once a users guardianID and userID are authenticated with Bearer auth they will be allowed to create a new goat.
 
 ### POST /api/guardians
+&nbsp;
 
 * This POST route is a route that can be created once a user has been created, or a user has signed up and received a tokenSeed.
+
   * This route will create and return a new guardian body by providing all of the required properties of the guardian model.
+
   * Once a users userID and tokenSeed is authenticated with Bearer auth they will be allowed to create themselves as a new guardian.
 
 ### GET /api/login
+&nbsp;
 
 * This GET route requires an Authorization header, and the user to provide a username and password.
+
   * The Authorization header needs to include the username:password of the specific user to be authenticated.
+
   * Logging in will return a brand new token that will be used for future user ID reference.
 
 ### GET /api/goats/:id
+&nbsp;
 
-* This GET route requires a userID and a guardianID
+* This GET route requires a userID and a guardianID.
+
   * This route will return a view of a goat posting on the site, with all of the properties the goat model requires.
+
   * Once a users token is verified by Bearer auth they will be allowed to view a goat.
 
 ### GET /api/guardians/:id
+&nbsp;
 
-* This GET route requires a guardianID
+* This GET route requires a guardianID.
+
   * This route will return a view of a new guardian body with all of the properties that the guardian model requires.
+
   * Once a users token is verified by Bearer auth they will be allowed to view themselves and others as guardians.
 
 ### PUT /api/goats/:id
+&nbsp;
 
 * This PUT route requires a guardianID in order to update a goat.
+
   * This route will return an updated goat posting with the required properties of the goat model.
+
   * The user must be authenticated by Bearer auth in order to update a goat, and in order to be authenticated they need a guardianID.
+
   * Once a user has been authenticated by Bearer auth, they will be allowed to update an existing goat post.
 
 ### PUT /api/guardians/:id
+&nbsp;
 
 * This PUT route requires a token in order to update a guardian.
+
   * This route will return an updated guardian profile with all of the properties of the guardian model.
+
   * The user must be authenticated by Bearer auth in order to update their own 'guardian', in order to be authenticated they must provide the token that they received when they became a user and 'signed up'.
+
   * Once a user has been authenticated by Bearer auth they will be allowed to update their guardian profile.
 
 ### DELETE /api/goats/:id
+&nbsp;
 
 * This PUT route requires a guardianID in order to delete a goat from the site.
+
   * This route will return a view that the goat has been successfully deleted from the database and website.
+
   * The user must be authenticated by Bearer auth in order to delete a goat, and in order to be authenticated they need a guardianID.
+
   * Once a user has been authenticated by Bearer auth they will be allowed to delete a goat.
 
 ### DELETE /api/guardians/:id
+&nbsp;
 
 * This DELETE route requires a token in order to delete a guardian.
+
   * This route will return a view that their guardian profile with all of the required guardian properties of the guardian model has been successfully deleted.
+
   * The user must be authenticated Bearer auth in order to delete their own 'guardian', and in order to be authenticated by Bearer auth they must provide the token that they received when they became a user and 'signed up'.
+
   * Once a user has been authenticated by Bearer auth they will be allowed to delete their guardian profile.
 
+# **Meet The Team**
+&nbsp;
 
+![Michael-Porter](){:class="img-responsive"}{:height="px" width="px"}
 
+![Dustin-Byers](){:class="img-responsive"}{:height="px" width="px"}
 
+![Michael-Miller](){:class="img-responsive"}{:height="px" width="px"}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-[![Build Status](https://travis-ci.org/izzybaer/goat-fellows.svg?branch=master)](https://travis-ci.org/izzybaer/goat-fellows)
+![Izzy-Baer](){:class="img-responsive"}{:height="px" width="px"}
