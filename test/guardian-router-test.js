@@ -391,19 +391,6 @@ describe('testing guardian-routes', () => {
             });
         });
     });
-    /////////////////////////////////////////////////////////
-    it.only('should respond with a 500', () => {
-      let tempData;
-      return mockGuardian.createOne()
-        .then(data => {
-          tempData = data;
-          return superagent.delete(`${API_URL}/api/guardians/${tempData.guardian._id}`)
-            .set('Authorization', `Bearer ${data.user.token}`)
-            .catch(err => {
-              expect(err.status).toEqual(500);
-            });
-        });
-    });
     it('should respond with a 401 for no Bearer', () => {
       let tempData;
       return mockGuardian.createOne()
