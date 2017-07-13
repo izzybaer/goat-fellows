@@ -154,6 +154,42 @@ describe('testing user auth routes', () => {
     });
   });
 
+  describe.only('testing PUT on /api/users/:id', () => {
+    it('should respond with a 200', () => {
+      let tempUser;
+      let fakeUser = {
+        email: 'potatoSDFAS@email.com',
+        username: 'carhatadgasd',
+        password: 'dynomite',
+      };
+      return mockUser.createOne()
+        .then((userData) => {
+          tempUser = userData;
+          console.log(tempUser.token)
+          return superagent.put(`${API_URL}/api/users/${tempUser.user._id}`)
+            .set(`Authorization`, `Bearer ${tempUser.token}`)
+            .send(fakeUser);
+        })
+        .then(res => {
+          expect(res.status).toEqual(200);
+          expect(res.body.username).toEqual(fakeUser.firstName);
+          expect(res.body.password).toEqual(fakeUser.lastName);
+          expect(res.body.email).toEqual(fakeUser.guardian.email);
+          expect(res.body.userID).toEqual(tempUser.guardian.userID);
+        });
+    });
+  });
+
+  // describe('testing DELETE on /api/users/:id', () => {
+  //   it('should respond with a PUT 204 then a get 404', () => {
+  //     let tempUser;
+  //     return mockUser.createOne()
+  //       .then((userData) => {
+  //
+  //       })
+  //   })
+  // });
+
   describe('testing catch all 404s', () => {
     it('should return 404 /api/*', () => {
       return superagent.get(`${API_URL}/api/blah`)
