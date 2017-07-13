@@ -318,7 +318,6 @@ describe('testing guardian-routes', () => {
           expect(res.body.userID).toEqual(tempData.guardian.userID);
         });
     });
-
     it('Should respond with a 400 bad values', () => {
       let tempData;
       return mockGuardian.createOne()
@@ -389,6 +388,19 @@ describe('testing guardian-routes', () => {
                 .catch(err => {
                   expect(err.status).toEqual(404);
                 });
+            });
+        });
+    });
+    /////////////////////////////////////////////////////////
+    it.only('should respond with a 500', () => {
+      let tempData;
+      return mockGuardian.createOne()
+        .then(data => {
+          tempData = data;
+          return superagent.delete(`${API_URL}/api/guardians/${tempData.guardian._id}`)
+            .set('Authorization', `Bearer ${data.user.token}`)
+            .catch(err => {
+              expect(err.status).toEqual(500);
             });
         });
     });
