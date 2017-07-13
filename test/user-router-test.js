@@ -154,7 +154,7 @@ describe('testing user auth routes', () => {
     });
   });
 
-  describe.only('testing PUT on /api/users/:id', () => {
+  describe('testing PUT on /api/users/:id', () => {
     it('should respond with a 200', () => {
       let tempUser;
       let fakeUser = {
@@ -176,6 +176,73 @@ describe('testing user auth routes', () => {
           expect(res.body.password).toNotEqual(tempUser.password);
           expect(res.body.email).toEqual(fakeUser.email);
           expect(res.body.userID).toEqual(tempUser.user.userID);
+        });
+    });
+    it('should respond with a 400 due to empty body', () => {
+      let tempUser;
+      return mockUser.createOne()
+        .then((userData) => {
+          tempUser = userData;
+          return superagent.put(`${API_URL}/api/users/${tempUser.user._id}`)
+            .set(`Authorization`, `Bearer ${tempUser.token}`)
+            .send({});
+        })
+        .catch(res => {
+          expect(res.status).toEqual(400);
+        });
+    });
+    it('should respond with a 401 due to bad token', () => {
+      let tempUser;
+      let fakeUser = {
+        email: 'potatoSDFAS@email.com',
+        username: 'carhatadgasd',
+        password: 'dynomite',
+      };
+      return mockUser.createOne()
+        .then((userData) => {
+          tempUser = userData;
+          return superagent.put(`${API_URL}/api/users/${tempUser.user._id}`)
+            .set(`Authorization`, `Bearer ${tempUser.token}d`)
+            .send(fakeUser);
+        })
+        .catch(res => {
+          expect(res.status).toEqual(401);
+        });
+    });
+    it('should respond with a 401 due to no auth header', () => {
+      let tempUser;
+      let fakeUser = {
+        email: 'potatoSDFAS@email.com',
+        username: 'carhatadgasd',
+        password: 'dynomite',
+      };
+      return mockUser.createOne()
+        .then((userData) => {
+          tempUser = userData;
+          return superagent.put(`${API_URL}/api/users/${tempUser.user._id}`)
+            .set(`FakeFake`, `Bearer ${tempUser.token}`)
+            .send(fakeUser);
+        })
+        .catch(res => {
+          expect(res.status).toEqual(401);
+        });
+    });
+    it('should respond with a 401 due to no bearer', () => {
+      let tempUser;
+      let fakeUser = {
+        email: 'potatoSDFAS@email.com',
+        username: 'carhatadgasd',
+        password: 'dynomite',
+      };
+      return mockUser.createOne()
+        .then((userData) => {
+          tempUser = userData;
+          return superagent.put(`${API_URL}/api/users/${tempUser.user._id}`)
+            .set(`Authorization`, `Bearer `)
+            .send(fakeUser);
+        })
+        .catch(res => {
+          expect(res.status).toEqual(401);
         });
     });
   });
